@@ -1,0 +1,40 @@
+-- Fix function search path security issue
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+DECLARE
+  username_val TEXT;
+  team_id_val UUID;
+BEGIN
+  -- Extract username from email (part before @)
+  username_val := split_part(NEW.email, '@', 1);
+  
+  -- Insert profile (handle conflicts)
+  INSERT INTO public.profiles (user_id, username, full_name)
+  VALUES (NEW.id, username_val, COALESCE(NEW.raw_user_meta_data->>'full_name', username_val))
+  ON CONFLICT (user_id) DO UPDATE SET
+    username = EXCLUDED.username,
+    full_name = EXCLUDED.full_name;
+  
+  -- Create team only if user doesn't have one yet
+  IF NOT EXISTS (SELECT 1 FROM public.team_members WHERE user_id = NEW.id) THEN
+    INSERT INTO public.teams (name, created_by)
+    VALUES (username_val || '''s Team', NEW.id)
+    RETURNING id INTO team_id_val;
+    
+    -- Add user as admin to the team
+    INSERT INTO public.team_members (team_id, user_id, role)
+    VALUES (team_id_val, NEW.id, 'admin');
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
+
+-- Fix updated_at function search path
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SET search_path = '';
