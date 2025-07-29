@@ -93,20 +93,61 @@ export type Database = {
           created_at: string | null
           full_name: string | null
           id: string
+          username: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
           full_name?: string | null
           id: string
+          username?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string | null
           full_name?: string | null
           id?: string
+          username?: string | null
         }
         Relationships: []
+      }
+      team_invites: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string
+          status: string
+          team_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by: string
+          status?: string
+          team_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string
+          status?: string
+          team_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_invites_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       team_members: {
         Row: {
