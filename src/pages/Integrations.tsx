@@ -5,14 +5,14 @@ import { FileText, MessageSquare, Database, Calendar, Mail, Video, Code, Workflo
 
 export const Integrations = () => {
   const integrations = [
-    {
-      icon: FileText,
-      name: 'Google Drive',
-      description: 'Sync documents, spreadsheets, and presentations automatically',
-      status: 'Available',
-      category: 'Document Management',
-      features: ['Real-time sync', 'Version control', 'Auto-import', 'Bi-directional sync']
-    },
+      {
+        icon: FileText,
+        name: 'Google Drive',
+        description: 'Sync documents, spreadsheets, and presentations automatically',
+        status: 'Coming Soon',
+        category: 'Document Management',
+        features: ['Real-time sync', 'Version control', 'Auto-import', 'Bi-directional sync']
+      },
     {
       icon: FileText,
       name: 'Notion',
@@ -133,10 +133,11 @@ export const Integrations = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button 
+                   <Button 
                     variant="outline" 
                     className="w-full" 
                     disabled={integration.status === 'Coming Soon'}
+                    onClick={() => window.open(`/integration/${integration.name.toLowerCase().replace(/\s+/g, '-')}`, '_blank')}
                   >
                     {integration.status === 'Available' && 'Connect'}
                     {integration.status === 'Beta' && 'Join Beta'}

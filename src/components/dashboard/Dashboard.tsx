@@ -7,6 +7,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Brain, FileText, Users, LogOut, Plus, Mail } from 'lucide-react';
 import { InviteTeamMemberDialog } from './InviteTeamMemberDialog';
 import { Tables } from '@/integrations/supabase/types';
+import { DocumentManager } from '@/components/documents/DocumentManager';
+import { AIChat } from '@/components/chat/AIChat';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type Profile = Tables<'profiles'>;
 type Team = Tables<'teams'>;
@@ -180,6 +183,10 @@ export const Dashboard = ({ user }: DashboardProps) => {
                 Manage your team's knowledge and collaborate with AI-powered insights.
               </p>
             </div>
+            <Button variant="outline" onClick={() => setIsInviteDialogOpen(true)}>
+              <Mail className="h-4 w-4 mr-2" />
+              Invite Team Member
+            </Button>
           </div>
 
           {/* Stats Cards */}
@@ -224,64 +231,27 @@ export const Dashboard = ({ user }: DashboardProps) => {
             </Card>
           </div>
 
-          {/* Actions */}
-          <div className="flex flex-wrap gap-4">
-            <Button onClick={handleCreateDocument}>
-              <Plus className="h-4 w-4 mr-2" />
-              Create Document
-            </Button>
-            <Button variant="outline" onClick={() => setIsInviteDialogOpen(true)}>
-              <Mail className="h-4 w-4 mr-2" />
-              Invite Team Member
-            </Button>
-          </div>
-
-          {/* Documents Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Documents</CardTitle>
-              <CardDescription>
-                Your team's latest knowledge documents
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {documents.length === 0 ? (
-                <div className="text-center py-8">
-                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No documents yet</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Create your first document to start building your team's knowledge base.
-                  </p>
-                  <Button onClick={handleCreateDocument}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create First Document
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {documents.map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="flex items-center justify-between p-4 border rounded-lg"
-                    >
-                      <div className="flex items-center space-x-3">
-                        <FileText className="h-5 w-5 text-muted-foreground" />
-                        <div>
-                          <h4 className="font-medium">{doc.title}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            Created {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : 'Unknown date'}
-                          </p>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm">
-                        View
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          {/* Main Workspace */}
+          <Tabs defaultValue="documents" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="documents">
+                <FileText className="h-4 w-4 mr-2" />
+                Documents
+              </TabsTrigger>
+              <TabsTrigger value="chat">
+                <Brain className="h-4 w-4 mr-2" />
+                AI Chat
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="documents" className="mt-6">
+              <DocumentManager user={user} teamId={team?.id || ''} />
+            </TabsContent>
+            <TabsContent value="chat" className="mt-6">
+              <div className="h-[600px]">
+                <AIChat user={user} teamId={team?.id || ''} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
 

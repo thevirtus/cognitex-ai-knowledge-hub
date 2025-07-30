@@ -17,16 +17,20 @@ export const Landing = () => {
             Transform your team's knowledge into intelligent insights with AI-powered document management and chat
           </p>
           <div className="flex gap-4 justify-center">
-            <Link to="/auth">
-              <Button size="lg" className="shadow-glow transition-smooth">
-                Get Started Free
-              </Button>
-            </Link>
-            <Link to="/pricing">
-              <Button variant="outline" size="lg">
-                View Pricing
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="shadow-glow transition-smooth"
+              onClick={() => window.open('/auth', '_self')}
+            >
+              Get Started Free
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={() => window.open('/pricing', '_self')}
+            >
+              View Pricing
+            </Button>
           </div>
         </div>
       </section>
@@ -110,11 +114,13 @@ export const Landing = () => {
           <p className="text-xl text-muted-foreground mb-8">
             Join thousands of teams already using Cognitex to unlock their collective intelligence
           </p>
-          <Link to="/auth">
-            <Button size="lg" className="shadow-glow transition-smooth">
-              Start Your Free Trial
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            className="shadow-glow transition-smooth"
+            onClick={() => window.open('/auth', '_self')}
+          >
+            Start Your Free Trial
+          </Button>
         </div>
       </section>
     </div>

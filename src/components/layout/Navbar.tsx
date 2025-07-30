@@ -62,16 +62,20 @@ export const Navbar = ({ user }: NavbarProps) => {
               </Link>
             ) : (
               <>
-                <Link to="/auth">
-                  <Button variant="ghost" size="sm">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link to="/auth">
-                  <Button size="sm" className="shadow-glow transition-smooth">
-                    Get Started
-                  </Button>
-                </Link>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => window.open('/auth', '_self')}
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="shadow-glow transition-smooth"
+                  onClick={() => window.open('/auth', '_self')}
+                >
+                  Get Started
+                </Button>
               </>
             )}
           </div>
@@ -120,16 +124,25 @@ export const Navbar = ({ user }: NavbarProps) => {
                   </Link>
                 ) : (
                   <>
-                    <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="ghost" className="w-full">
-                        Sign In
-                      </Button>
-                    </Link>
-                    <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button className="w-full shadow-glow transition-smooth">
-                        Get Started
-                      </Button>
-                    </Link>
+                    <Button 
+                      variant="ghost" 
+                      className="w-full"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        window.open('/auth', '_self');
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                    <Button 
+                      className="w-full shadow-glow transition-smooth"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        window.open('/auth', '_self');
+                      }}
+                    >
+                      Get Started
+                    </Button>
                   </>
                 )}
               </div>

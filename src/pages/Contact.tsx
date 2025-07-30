@@ -85,8 +85,12 @@ export const Contact = () => {
                     <Textarea id="message" name="message" value={formData.message} onChange={handleChange} required placeholder="Tell us about your project or questions..." rows={6} />
                   </div>
 
-                  <Button type="submit" disabled={isLoading} className="w-full shadow-glow transition-smooth">
-                    {isLoading ? 'Sending...' : 'Send Message'}
+                  <Button 
+                    type="button" 
+                    className="w-full shadow-glow transition-smooth"
+                    onClick={() => window.open(`mailto:connectcognitex@gmail.com?subject=Contact Form Message&body=Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0ACompany: ${formData.company}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`)}
+                  >
+                    Send Message via Email
                   </Button>
                 </form>
               </CardContent>
@@ -142,7 +146,11 @@ export const Contact = () => {
                 <p className="text-muted-foreground text-sm mb-4">
                   Need dedicated support? Our enterprise team is here to help with custom solutions.
                 </p>
-                <Button variant="outline" className="w-full">
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => window.open('mailto:connectcognitex@gmail.com?subject=Enterprise Support Inquiry')}
+                >
                   Contact Enterprise
                 </Button>
               </CardContent>
