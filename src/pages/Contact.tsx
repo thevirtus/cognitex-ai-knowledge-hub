@@ -6,7 +6,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Mail, MapPin, Phone, Clock } from 'lucide-react';
-
 export const Contact = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -15,33 +14,34 @@ export const Contact = () => {
     company: '',
     message: ''
   });
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
-
     toast({
       title: "Message sent!",
-      description: "We'll get back to you within 24 hours.",
+      description: "We'll get back to you within 24 hours."
     });
-
-    setFormData({ name: '', email: '', company: '', message: '' });
+    setFormData({
+      name: '',
+      email: '',
+      company: '',
+      message: ''
+    });
     setIsLoading(false);
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
-
-  return (
-    <div className="min-h-screen gradient-subtle py-20 px-4">
+  return <div className="min-h-screen gradient-subtle py-20 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold mb-4 text-foreground">
@@ -67,51 +67,22 @@ export const Contact = () => {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Name *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        placeholder="Your full name"
-                      />
+                      <Input id="name" name="name" value={formData.name} onChange={handleChange} required placeholder="Your full name" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        placeholder="your@email.com"
-                      />
+                      <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="your@email.com" />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
                     <Label htmlFor="company">Company</Label>
-                    <Input
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      placeholder="Your company name"
-                    />
+                    <Input id="company" name="company" value={formData.company} onChange={handleChange} placeholder="Your company name" />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="message">Message *</Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      placeholder="Tell us about your project or questions..."
-                      rows={6}
-                    />
+                    <Textarea id="message" name="message" value={formData.message} onChange={handleChange} required placeholder="Tell us about your project or questions..." rows={6} />
                   </div>
 
                   <Button type="submit" disabled={isLoading} className="w-full shadow-glow transition-smooth">
@@ -132,8 +103,8 @@ export const Contact = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">support@cognitex.ai</p>
-                <p className="text-muted-foreground">sales@cognitex.ai</p>
+                <p className="text-muted-foreground">connectcognitex@gmail.com</p>
+                
               </CardContent>
             </Card>
 
@@ -158,7 +129,7 @@ export const Contact = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">San Francisco, CA</p>
+                <p className="text-muted-foreground">Lexington, KY</p>
                 <p className="text-muted-foreground">United States</p>
               </CardContent>
             </Card>
@@ -179,6 +150,5 @@ export const Contact = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
