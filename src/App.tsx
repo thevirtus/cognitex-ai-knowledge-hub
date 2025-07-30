@@ -12,6 +12,11 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { Landing } from "./pages/Landing";
 import { Pricing } from "./pages/Pricing";
+import { Features } from "./pages/Features";
+import { Integrations } from "./pages/Integrations";
+import { API } from "./pages/API";
+import { Security } from "./pages/Security";
+import { Contact } from "./pages/Contact";
 import { Privacy } from "./pages/Privacy";
 import { Terms } from "./pages/Terms";
 import { Settings } from "./pages/Settings";
@@ -61,6 +66,11 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={user ? <Index /> : <Landing />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/integrations" element={<Integrations />} />
+          <Route path="/api" element={<API />} />
+          <Route path="/security" element={<Security />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/auth" element={user ? <Index /> : <AuthPage />} />
