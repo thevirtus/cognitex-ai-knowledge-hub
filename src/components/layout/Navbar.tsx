@@ -20,7 +20,8 @@ export const Navbar = ({ user }: NavbarProps) => {
     { name: 'Chat', path: '/chat' },
     { name: 'Settings', path: '/settings' }
   ] : [
-    { name: 'Features', path: '/#features' },
+    { name: 'Integrations', path: '/integrations' },
+    { name: 'Features', path: '/features' },
     { name: 'Pricing', path: '/pricing' },
     { name: 'About', path: '/about' }
   ];

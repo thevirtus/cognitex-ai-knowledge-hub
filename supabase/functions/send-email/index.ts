@@ -52,7 +52,8 @@ serve(async (req) => {
             
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
             <p style="color: #64748b; font-size: 12px; text-align: center;">
-              © 2024 Cognitex. All rights reserved.
+              © 2024 Cognitex. All rights reserved.<br>
+              Contact us: <a href="mailto:connectcognitex@gmail.com">connectcognitex@gmail.com</a>
             </p>
           </div>
         `,
@@ -80,7 +81,8 @@ serve(async (req) => {
             
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
             <p style="color: #64748b; font-size: 12px; text-align: center;">
-              © 2024 Cognitex. All rights reserved.
+              © 2024 Cognitex. All rights reserved.<br>
+              Contact us: <a href="mailto:connectcognitex@gmail.com">connectcognitex@gmail.com</a>
             </p>
           </div>
         `,
@@ -117,7 +119,8 @@ serve(async (req) => {
             
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
             <p style="color: #64748b; font-size: 12px; text-align: center;">
-              © 2024 Cognitex. All rights reserved.
+              © 2024 Cognitex. All rights reserved.<br>
+              Contact us: <a href="mailto:connectcognitex@gmail.com">connectcognitex@gmail.com</a>
             </p>
           </div>
         `,

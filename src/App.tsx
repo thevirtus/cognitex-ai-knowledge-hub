@@ -21,6 +21,7 @@ import { Contact } from "./pages/Contact";
 import { Privacy } from "./pages/Privacy";
 import { Terms } from "./pages/Terms";
 import { Settings } from "./pages/Settings";
+import { About } from "./pages/About";
 import { AuthPage } from '@/components/auth/AuthPage';
 import { Dashboard } from '@/components/dashboard/Dashboard';
 
@@ -68,6 +69,7 @@ const AppContent = () => {
           <Route path="/" element={user ? <Index /> : <Landing />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/features" element={<Features />} />
+          <Route path="/about" element={<About />} />
           <Route path="/integrations" element={<Integrations />} />
           <Route path="/integration/:name" element={<IntegrationDetail />} />
           <Route path="/api" element={<API />} />

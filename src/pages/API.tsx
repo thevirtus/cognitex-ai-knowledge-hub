@@ -1,257 +1,328 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Code, Database, Zap, Shield, Globe, Terminal } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { Code, Key, ExternalLink, Copy, CheckCircle, AlertCircle } from 'lucide-react';
 
 export const API = () => {
-  const endpoints = [
-    {
-      method: 'GET',
-      path: '/api/v1/documents',
-      description: 'List all documents',
-      auth: 'Required'
-    },
-    {
-      method: 'POST',
-      path: '/api/v1/documents',
-      description: 'Create a new document',
-      auth: 'Required'
-    },
-    {
-      method: 'PUT',
-      path: '/api/v1/documents/{id}',
-      description: 'Update a document',
-      auth: 'Required'
-    },
-    {
-      method: 'DELETE',
-      path: '/api/v1/documents/{id}',
-      description: 'Delete a document',
-      auth: 'Required'
-    },
-    {
-      method: 'POST',
-      path: '/api/v1/documents/{id}/summarize',
-      description: 'Generate AI summary',
-      auth: 'Required'
-    },
-    {
-      method: 'POST',
-      path: '/api/v1/chat',
-      description: 'Chat with documents',
-      auth: 'Required'
-    }
-  ];
+  const [apiKey, setApiKey] = useState('');
+  const [showKey, setShowKey] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
-  const features = [
-    {
-      icon: Database,
-      title: 'Full CRUD Operations',
-      description: 'Complete access to all document and team management functions'
-    },
-    {
-      icon: Zap,
-      title: 'Real-time Webhooks',
-      description: 'Get notified instantly when content changes or events occur'
-    },
-    {
-      icon: Shield,
-      title: 'Secure Authentication',
-      description: 'OAuth 2.0 and API key authentication with rate limiting'
-    },
-    {
-      icon: Globe,
-      title: 'RESTful Design',
-      description: 'Standard HTTP methods with JSON responses and pagination'
-    }
-  ];
-
-  const getMethodColor = (method: string) => {
-    switch (method) {
-      case 'GET': return 'bg-green-500';
-      case 'POST': return 'bg-blue-500';
-      case 'PUT': return 'bg-yellow-500';
-      case 'DELETE': return 'bg-red-500';
-      default: return 'bg-gray-500';
-    }
+  const generateApiKey = () => {
+    const key = 'cgx_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    setApiKey(key);
+    toast({
+      title: "API Key Generated",
+      description: "Your new API key has been generated. Keep it secure!",
+    });
   };
 
-  return (
-    <div className="min-h-screen gradient-subtle py-20 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4 text-foreground">
-            Cognitex API
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Build powerful integrations with our comprehensive REST API. Access all platform features 
-            programmatically and create custom workflows for your team.
-          </p>
-        </div>
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+    toast({
+      title: "Copied to clipboard",
+      description: "The code has been copied to your clipboard.",
+    });
+  };
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {features.map((feature, index) => {
-            const IconComponent = feature.icon;
-            return (
-              <Card key={index} className="shadow-elegant border-0 text-center">
-                <CardHeader>
-                  <IconComponent className="h-8 w-8 text-primary mx-auto mb-2" />
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
-                  <CardDescription className="text-sm">
-                    {feature.description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            );
-          })}
-        </div>
+  const codeExamples = {
+    javascript: `// Initialize Cognitex API client
+const cognitex = new CognitexAPI({
+  apiKey: '${apiKey || 'your-api-key-here'}',
+  baseURL: 'https://api.cognitex.ai/v1'
+});
 
-        {/* API Documentation */}
-        <Card className="shadow-elegant border-0 mb-16">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Terminal className="h-6 w-6 text-primary" />
-              API Reference
-            </CardTitle>
-            <CardDescription>
-              Explore our API endpoints and learn how to integrate with Cognitex
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="endpoints" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="endpoints">Endpoints</TabsTrigger>
-                <TabsTrigger value="authentication">Authentication</TabsTrigger>
-                <TabsTrigger value="examples">Examples</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="endpoints" className="space-y-4">
-                <h3 className="text-lg font-semibold mb-4">Available Endpoints</h3>
-                <div className="space-y-3">
-                  {endpoints.map((endpoint, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-card/50 rounded-lg">
-                      <div className="flex items-center gap-4">
-                        <Badge className={`${getMethodColor(endpoint.method)} text-white px-3 py-1`}>
-                          {endpoint.method}
-                        </Badge>
-                        <code className="text-sm bg-muted px-2 py-1 rounded">
-                          {endpoint.path}
-                        </code>
-                        <span className="text-sm text-muted-foreground">
-                          {endpoint.description}
-                        </span>
-                      </div>
-                      <Badge variant="outline" className="text-xs">
-                        {endpoint.auth}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="authentication" className="space-y-4">
-                <h3 className="text-lg font-semibold mb-4">Authentication Methods</h3>
-                <div className="space-y-6">
-                  <div className="p-4 bg-card/50 rounded-lg">
-                    <h4 className="font-semibold mb-2">API Key Authentication</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Include your API key in the Authorization header:
-                    </p>
-                    <code className="block bg-muted p-3 rounded text-sm">
-                      Authorization: Bearer your-api-key-here
-                    </code>
-                  </div>
-                  
-                  <div className="p-4 bg-card/50 rounded-lg">
-                    <h4 className="font-semibold mb-2">OAuth 2.0</h4>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      For user-facing applications, use OAuth 2.0 authorization code flow:
-                    </p>
-                    <code className="block bg-muted p-3 rounded text-sm">
-                      GET /oauth/authorize?client_id=your-client-id&response_type=code
-                    </code>
-                  </div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="examples" className="space-y-4">
-                <h3 className="text-lg font-semibold mb-4">Code Examples</h3>
-                <div className="space-y-6">
-                  <div className="p-4 bg-card/50 rounded-lg">
-                    <h4 className="font-semibold mb-2">Create a Document</h4>
-                    <pre className="bg-muted p-3 rounded text-sm overflow-x-auto">
-{`curl -X POST "https://api.cognitex.ai/v1/documents" \\
-  -H "Authorization: Bearer your-api-key" \\
+// Upload and analyze a document
+const result = await cognitex.documents.create({
+  title: 'My Document',
+  content: 'Document content here...',
+  teamId: 'your-team-id'
+});
+
+// Query your knowledge base
+const answer = await cognitex.chat.query({
+  question: 'What is our company policy on remote work?',
+  teamId: 'your-team-id'
+});`,
+    
+    python: `import cognitex
+
+# Initialize client
+client = cognitex.Client(
+    api_key="${apiKey || 'your-api-key-here'}",
+    base_url="https://api.cognitex.ai/v1"
+)
+
+# Upload document
+document = client.documents.create(
+    title="My Document",
+    content="Document content here...",
+    team_id="your-team-id"
+)
+
+# Query knowledge base
+response = client.chat.query(
+    question="What is our company policy on remote work?",
+    team_id="your-team-id"
+)`,
+    
+    curl: `# Upload a document
+curl -X POST "https://api.cognitex.ai/v1/documents" \\
+  -H "Authorization: Bearer ${apiKey || 'your-api-key-here'}" \\
   -H "Content-Type: application/json" \\
   -d '{
     "title": "My Document",
-    "content": "Document content here",
-    "team_id": "team-uuid"
-  }'`}
-                    </pre>
-                  </div>
-                  
-                  <div className="p-4 bg-card/50 rounded-lg">
-                    <h4 className="font-semibold mb-2">Generate AI Summary</h4>
-                    <pre className="bg-muted p-3 rounded text-sm overflow-x-auto">
-{`curl -X POST "https://api.cognitex.ai/v1/documents/doc-id/summarize" \\
-  -H "Authorization: Bearer your-api-key" \\
-  -H "Content-Type: application/json"`}
-                    </pre>
-                  </div>
+    "content": "Document content here...",
+    "teamId": "your-team-id"
+  }'
+
+# Query knowledge base
+curl -X POST "https://api.cognitex.ai/v1/chat/query" \\
+  -H "Authorization: Bearer ${apiKey || 'your-api-key-here'}" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "question": "What is our company policy on remote work?",
+    "teamId": "your-team-id"
+  }'`
+  };
+
+  return (
+    <div className="min-h-screen bg-background pt-20">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-4 text-foreground">API Documentation</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Integrate Cognitex's AI-powered knowledge management capabilities directly into your applications with our RESTful API
+          </p>
+        </div>
+
+        {/* API Key Generation */}
+        <Card className="mb-12 shadow-elegant border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Key className="h-5 w-5 mr-2" />
+              API Key Management
+            </CardTitle>
+            <CardDescription>
+              Generate and manage your API keys for accessing Cognitex services
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-4 items-end">
+              <div className="flex-1">
+                <Label htmlFor="api-key">Your API Key</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="api-key"
+                    type={showKey ? "text" : "password"}
+                    value={apiKey}
+                    placeholder="Generate an API key to get started"
+                    readOnly
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => setShowKey(!showKey)}
+                    disabled={!apiKey}
+                  >
+                    {showKey ? <AlertCircle className="h-4 w-4" /> : <Key className="h-4 w-4" />}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => copyToClipboard(apiKey)}
+                    disabled={!apiKey}
+                  >
+                    {copied ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
                 </div>
-              </TabsContent>
+              </div>
+              <Button onClick={generateApiKey}>
+                Generate New Key
+              </Button>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <AlertCircle className="h-4 w-4" />
+              Keep your API key secure and never share it in client-side code
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Code Examples */}
+        <Card className="mb-12 shadow-elegant border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Code className="h-5 w-5 mr-2" />
+              Code Examples
+            </CardTitle>
+            <CardDescription>
+              Get started quickly with these code examples in your preferred language
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="javascript" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="javascript">JavaScript</TabsTrigger>
+                <TabsTrigger value="python">Python</TabsTrigger>
+                <TabsTrigger value="curl">cURL</TabsTrigger>
+              </TabsList>
+              
+              {Object.entries(codeExamples).map(([lang, code]) => (
+                <TabsContent key={lang} value={lang} className="mt-4">
+                  <div className="relative">
+                    <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">
+                      <code>{code}</code>
+                    </pre>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={() => copyToClipboard(code)}
+                    >
+                      {copied ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </TabsContent>
+              ))}
             </Tabs>
           </CardContent>
         </Card>
 
-        {/* SDKs and Libraries */}
-        <Card className="shadow-elegant border-0 mb-16">
-          <CardHeader className="text-center">
-            <CardTitle>SDKs & Libraries</CardTitle>
-            <CardDescription>
-              Official client libraries for popular programming languages
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-4 gap-4">
-              {['JavaScript', 'Python', 'Node.js', 'Go'].map((lang, index) => (
-                <div key={index} className="text-center p-4 bg-card/50 rounded-lg">
-                  <h4 className="font-semibold text-sm mb-2">{lang}</h4>
-                  <Badge variant="outline" className="text-xs">
-                    Coming Soon
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {/* API Endpoints */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12">
+          <Card className="shadow-elegant border-0">
+            <CardHeader>
+              <Code className="h-8 w-8 text-primary mb-2" />
+              <CardTitle>Documents API</CardTitle>
+              <CardDescription>
+                Upload, manage, and retrieve documents from your knowledge base
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Badge variant="secondary">POST</Badge>
+                <code className="text-sm">/documents</code>
+              </div>
+              <div className="flex items-center justify-between">
+                <Badge variant="outline">GET</Badge>
+                <code className="text-sm">/documents/:id</code>
+              </div>
+              <div className="flex items-center justify-between">
+                <Badge variant="destructive">DELETE</Badge>
+                <code className="text-sm">/documents/:id</code>
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Get Started */}
-        <Card className="shadow-elegant border-0">
-          <CardHeader className="text-center">
-            <CardTitle>Ready to Get Started?</CardTitle>
-            <CardDescription>
-              Generate your API key and start building with Cognitex today
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <div className="space-x-4">
-              <Button className="shadow-glow transition-smooth">
-                Generate API Key
+          <Card className="shadow-elegant border-0">
+            <CardHeader>
+              <Code className="h-8 w-8 text-primary mb-2" />
+              <CardTitle>AI Chat API</CardTitle>
+              <CardDescription>
+                Query your knowledge base using natural language
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Badge variant="secondary">POST</Badge>
+                <code className="text-sm">/chat/query</code>
+              </div>
+              <div className="flex items-center justify-between">
+                <Badge variant="outline">GET</Badge>
+                <code className="text-sm">/chat/history</code>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-elegant border-0">
+            <CardHeader>
+              <Code className="h-8 w-8 text-primary mb-2" />
+              <CardTitle>Teams API</CardTitle>
+              <CardDescription>
+                Manage team members and permissions
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Badge variant="outline">GET</Badge>
+                <code className="text-sm">/teams</code>
+              </div>
+              <div className="flex items-center justify-between">
+                <Badge variant="secondary">POST</Badge>
+                <code className="text-sm">/teams/:id/invite</code>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Additional Resources */}
+        <div className="grid gap-6 md:grid-cols-3">
+          <Card className="shadow-elegant border-0">
+            <CardHeader>
+              <CardTitle>Full Documentation</CardTitle>
+              <CardDescription>
+                Complete API reference with detailed examples
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                className="w-full" 
+                variant="outline"
+                onClick={() => window.open('https://docs.cognitex.ai/api', '_blank')}
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                View Full Docs
               </Button>
-              <Button variant="outline">
-                View Full Documentation
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-elegant border-0">
+            <CardHeader>
+              <CardTitle>SDKs & Libraries</CardTitle>
+              <CardDescription>
+                Official SDKs for popular programming languages
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                className="w-full" 
+                variant="outline"
+                onClick={() => window.open('https://github.com/cognitex-ai/sdks', '_blank')}
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Download SDKs
               </Button>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Need help? Contact our developer support team at 
-              <span className="font-semibold"> api@cognitex.ai</span>
-            </p>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-elegant border-0">
+            <CardHeader>
+              <CardTitle>Support</CardTitle>
+              <CardDescription>
+                Get help with API integration and troubleshooting
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                className="w-full" 
+                variant="outline"
+                onClick={() => window.open('/contact', '_self')}
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Contact Support
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

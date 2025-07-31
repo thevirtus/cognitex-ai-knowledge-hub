@@ -8,29 +8,49 @@ export const Landing = () => {
     <div className="min-h-screen gradient-subtle">
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="flex items-center justify-center mb-6">
-            <Brain className="h-12 w-12 text-primary mr-4" />
-            <h1 className="text-5xl font-bold text-foreground">Cognitex</h1>
-          </div>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Transform your team's knowledge into intelligent insights with AI-powered document management and chat
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Button 
-              size="lg" 
-              className="shadow-glow transition-smooth"
-              onClick={() => window.open('/auth', '_self')}
-            >
-              Get Started Free
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              onClick={() => window.open('/pricing', '_self')}
-            >
-              View Pricing
-            </Button>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - Content */}
+            <div className="text-center lg:text-left">
+              <div className="flex items-center justify-center lg:justify-start mb-6">
+                <Brain className="h-12 w-12 text-primary mr-4" />
+                <h1 className="text-5xl font-bold text-foreground">Cognitex</h1>
+              </div>
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
+                Transform your team's knowledge into intelligent insights with AI-powered document management and chat
+              </p>
+              <div className="flex gap-4 justify-center lg:justify-start">
+                <Button 
+                  size="lg" 
+                  className="shadow-glow transition-smooth"
+                  onClick={() => window.open('/auth', '_self')}
+                >
+                  Get Started Free
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  onClick={() => window.open('/pricing', '_self')}
+                >
+                  View Pricing
+                </Button>
+              </div>
+            </div>
+            
+            {/* Right Column - Visual */}
+            <div className="flex items-center justify-center">
+              <div className="relative">
+                <div className="w-80 h-80 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center shadow-elegant">
+                  <Brain className="h-32 w-32 text-primary animate-pulse" />
+                </div>
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center">
+                  <FileText className="h-8 w-8 text-accent" />
+                </div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center">
+                  <Users className="h-6 w-6 text-secondary" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
