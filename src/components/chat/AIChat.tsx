@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -44,10 +45,21 @@ export const AIChat = ({ user, teamId }: AIChatProps) => {
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
 
-    // Check if user has premium access (for now, show paywall)
-    if (messages.length > 2) {
-      setShowPaywall(true);
-      return;
+    // Check subscription status first
+    try {
+      const { data: subscriptionCheck } = await supabase.functions.invoke('check-subscription');
+      
+      if (!subscriptionCheck?.subscribed && messages.length > 2) {
+        setShowPaywall(true);
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking subscription:', error);
+      // Allow a few free messages even if subscription check fails
+      if (messages.length > 2) {
+        setShowPaywall(true);
+        return;
+      }
     }
 
     const userMessage: Message = {
@@ -62,24 +74,48 @@ export const AIChat = ({ user, teamId }: AIChatProps) => {
     setIsLoading(true);
 
     try {
-      // Simulate AI response (in real implementation, this would call OpenAI API)
-      setTimeout(() => {
-        const aiMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: `I understand you're asking about "${inputMessage}". This is a demo response. In the full version, I would analyze your team's documents and provide intelligent insights based on your knowledge base.`,
-          timestamp: new Date(),
-        };
-        
-        setMessages(prev => [...prev, aiMessage]);
-        setIsLoading(false);
-      }, 1500);
+      // Get team documents for context
+      const { data: documents } = await supabase
+        .from('documents')
+        .select('id, title, content')
+        .eq('team_id', teamId)
+        .limit(10);
+
+      // Call AI chat function
+      const { data: aiResponse, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          question: inputMessage,
+          documents: documents || [],
+          context: `Team ID: ${teamId}`
+        }
+      });
+
+      if (error) throw error;
+
+      const aiMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: aiResponse.answer || 'I apologize, but I encountered an error processing your request.',
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error: any) {
       toast({
         title: "Error sending message",
         description: error.message,
         variant: "destructive",
       });
+      
+      // Add error message to chat
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'I apologize, but I encountered an error processing your request. Please try again.',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
     }
   };

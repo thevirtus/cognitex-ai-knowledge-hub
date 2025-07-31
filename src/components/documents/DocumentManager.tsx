@@ -141,11 +141,32 @@ export const DocumentManager = ({ user, teamId }: DocumentManagerProps) => {
     setIsSummarizing(doc.id);
     
     try {
-      // This would call an AI service to generate a summary
-      // For now, we'll show a placeholder
+      // Check subscription status first
+      const { data: subscriptionCheck } = await supabase.functions.invoke('check-subscription');
+      
+      if (!subscriptionCheck?.subscribed) {
+        toast({
+          title: "AI Summary (Premium Feature)",
+          description: "Upgrade to Premium to access AI-powered document summaries.",
+          variant: "default",
+        });
+        return;
+      }
+
+      // Call AI summarize function
+      const { data: summaryResponse, error } = await supabase.functions.invoke('ai-summarize', {
+        body: {
+          content: doc.content,
+          title: doc.title
+        }
+      });
+
+      if (error) throw error;
+
+      // Show summary in a toast for now (could be expanded to a modal)
       toast({
-        title: "AI Summary (Premium Feature)",
-        description: "Upgrade to Premium to access AI-powered document summaries.",
+        title: "AI Summary Generated",
+        description: summaryResponse.summary.substring(0, 150) + "...",
         variant: "default",
       });
     } catch (error: any) {

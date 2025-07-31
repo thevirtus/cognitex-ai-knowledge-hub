@@ -42,6 +42,20 @@ export const InviteTeamMemberDialog = ({
         throw new Error('Not authenticated');
       }
 
+      // Get current user's profile for the email
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name, username')
+        .eq('id', currentUser.user.id)
+        .single();
+
+      // Get team name
+      const { data: team } = await supabase
+        .from('teams')
+        .select('name')
+        .eq('id', teamId)
+        .single();
+
       const { error } = await supabase
         .from('team_invites')
         .insert({
@@ -52,6 +66,23 @@ export const InviteTeamMemberDialog = ({
 
       if (error) {
         throw error;
+      }
+
+      // Send invitation email
+      const { error: emailError } = await supabase.functions.invoke('send-email', {
+        body: {
+          type: 'team_invite',
+          data: {
+            inviteEmail: email.toLowerCase().trim(),
+            teamName: team?.name || 'Team',
+            inviterName: profile?.full_name || profile?.username || 'Team member'
+          }
+        }
+      });
+
+      if (emailError) {
+        console.error('Error sending email:', emailError);
+        // Don't fail the invite if email fails
       }
 
       onInviteSent();

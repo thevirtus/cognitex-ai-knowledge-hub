@@ -4,12 +4,14 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Brain, FileText, Users, LogOut, Plus, Mail } from 'lucide-react';
+import { Brain, FileText, Users, LogOut, Plus, Mail, Crown } from 'lucide-react';
 import { InviteTeamMemberDialog } from './InviteTeamMemberDialog';
 import { Tables } from '@/integrations/supabase/types';
 import { DocumentManager } from '@/components/documents/DocumentManager';
 import { AIChat } from '@/components/chat/AIChat';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSubscription } from '@/hooks/useSubscription';
+import { Badge } from '@/components/ui/badge';
 
 type Profile = Tables<'profiles'>;
 type Team = Tables<'teams'>;
@@ -26,6 +28,7 @@ export const Dashboard = ({ user }: DashboardProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const { toast } = useToast();
+  const { subscription, createCheckout, openCustomerPortal } = useSubscription();
 
   useEffect(() => {
     loadUserData();
@@ -183,10 +186,28 @@ export const Dashboard = ({ user }: DashboardProps) => {
                 Manage your team's knowledge and collaborate with AI-powered insights.
               </p>
             </div>
-            <Button variant="outline" onClick={() => setIsInviteDialogOpen(true)}>
-              <Mail className="h-4 w-4 mr-2" />
-              Invite Team Member
-            </Button>
+            <div className="flex items-center space-x-3">
+              {subscription?.subscribed ? (
+                <div className="flex items-center space-x-2">
+                  <Badge variant="default" className="bg-green-100 text-green-800">
+                    <Crown className="h-3 w-3 mr-1" />
+                    {subscription.tier || 'Premium'}
+                  </Badge>
+                  <Button variant="outline" onClick={openCustomerPortal}>
+                    Manage Subscription
+                  </Button>
+                </div>
+              ) : (
+                <Button onClick={() => createCheckout('premium')}>
+                  <Crown className="h-4 w-4 mr-2" />
+                  Upgrade to Premium
+                </Button>
+              )}
+              <Button variant="outline" onClick={() => setIsInviteDialogOpen(true)}>
+                <Mail className="h-4 w-4 mr-2" />
+                Invite Team Member
+              </Button>
+            </div>
           </div>
 
           {/* Stats Cards */}
@@ -219,13 +240,18 @@ export const Dashboard = ({ user }: DashboardProps) => {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">AI Chat</CardTitle>
-                <Brain className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm font-medium">Subscription</CardTitle>
+                <Crown className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">Ready</div>
+                <div className="text-2xl font-bold">
+                  {subscription?.subscribed ? (subscription.tier || 'Premium') : 'Free'}
+                </div>
                 <p className="text-xs text-muted-foreground">
-                  AI assistant available
+                  {subscription?.subscribed 
+                    ? 'Full access to all features' 
+                    : 'Limited access - upgrade for more'
+                  }
                 </p>
               </CardContent>
             </Card>
