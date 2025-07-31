@@ -49,33 +49,6 @@ export type Database = {
           },
         ]
       }
-      ai_message_usage: {
-        Row: {
-          created_at: string
-          id: string
-          messages_used: number
-          reset_date: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          messages_used?: number
-          reset_date?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          messages_used?: number
-          reset_date?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       documents: {
         Row: {
           content: string | null
@@ -113,65 +86,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      integrations: {
-        Row: {
-          config: Json
-          created_at: string
-          id: string
-          integration_name: string
-          integration_type: string
-          is_active: boolean
-          team_id: string
-          updated_at: string
-        }
-        Insert: {
-          config?: Json
-          created_at?: string
-          id?: string
-          integration_name: string
-          integration_type: string
-          is_active?: boolean
-          team_id: string
-          updated_at?: string
-        }
-        Update: {
-          config?: Json
-          created_at?: string
-          id?: string
-          integration_name?: string
-          integration_type?: string
-          is_active?: boolean
-          team_id?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "integrations_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      owner_privileges: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-        }
-        Relationships: []
       }
       profiles: {
         Row: {
@@ -323,14 +237,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      is_owner: {
-        Args: { user_email: string }
-        Returns: boolean
-      }
-      reset_daily_ai_limits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
