@@ -34,6 +34,12 @@ serve(async (req) => {
       case 'notion':
         result = await handleNotionAction(integration, action, data);
         break;
+      case 'google_drive':
+        result = await handleGoogleDriveAction(integration, action, data);
+        break;
+      case 'github':
+        result = await handleGitHubAction(integration, action, data);
+        break;
       case 'slack':
         result = await handleSlackAction(integration, action, data);
         break;
@@ -152,6 +158,166 @@ async function handleNotionAction(integration: any, action: string, data: any) {
       
     default:
       throw new Error(`Unsupported Notion action: ${action}`);
+  }
+}
+
+async function handleGoogleDriveAction(integration: any, action: string, data: any) {
+  const config = integration.config;
+  
+  switch (action) {
+    case 'fetch_documents':
+      try {
+        const response = await fetch('https://www.googleapis.com/drive/v3/files?pageSize=20&orderBy=modifiedTime desc', {
+          headers: {
+            'Authorization': `Bearer ${config.access_token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Google Drive API error: ${response.statusText}`);
+        }
+
+        const driveData = await response.json();
+        
+        return {
+          message: 'Documents fetched successfully',
+          documents: driveData.files?.map((file: any) => ({
+            id: file.id,
+            title: file.name,
+            url: `https://drive.google.com/file/d/${file.id}/view`,
+            lastModified: file.modifiedTime,
+            createdTime: file.createdTime,
+            mimeType: file.mimeType
+          })) || []
+        };
+      } catch (error) {
+        console.error('Google Drive fetch error:', error);
+        throw new Error(`Failed to fetch Google Drive documents: ${error.message}`);
+      }
+    
+    case 'test_connection':
+      try {
+        const response = await fetch('https://www.googleapis.com/drive/v3/about?fields=user', {
+          headers: {
+            'Authorization': `Bearer ${config.access_token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Google Drive connection test failed: ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        return { 
+          message: 'Google Drive connection test successful',
+          user: userData.user?.displayName || userData.user?.emailAddress
+        };
+      } catch (error) {
+        throw new Error(`Google Drive connection test failed: ${error.message}`);
+      }
+      
+    default:
+      throw new Error(`Unsupported Google Drive action: ${action}`);
+  }
+}
+
+async function handleGitHubAction(integration: any, action: string, data: any) {
+  const config = integration.config;
+  
+  switch (action) {
+    case 'fetch_repositories':
+      try {
+        const response = await fetch('https://api.github.com/user/repos?sort=updated&per_page=20', {
+          headers: {
+            'Authorization': `Bearer ${config.access_token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'Cognitex-Integration'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`GitHub API error: ${response.statusText}`);
+        }
+
+        const repos = await response.json();
+        
+        return {
+          message: 'Repositories fetched successfully',
+          repositories: repos.map((repo: any) => ({
+            id: repo.id,
+            name: repo.name,
+            fullName: repo.full_name,
+            url: repo.html_url,
+            description: repo.description,
+            lastUpdated: repo.updated_at,
+            language: repo.language,
+            stars: repo.stargazers_count
+          }))
+        };
+      } catch (error) {
+        console.error('GitHub fetch error:', error);
+        throw new Error(`Failed to fetch GitHub repositories: ${error.message}`);
+      }
+
+    case 'fetch_issues':
+      try {
+        const response = await fetch(`https://api.github.com/repos/${data.repo}/issues?state=open&per_page=20`, {
+          headers: {
+            'Authorization': `Bearer ${config.access_token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'Cognitex-Integration'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`GitHub API error: ${response.statusText}`);
+        }
+
+        const issues = await response.json();
+        
+        return {
+          message: 'Issues fetched successfully',
+          issues: issues.map((issue: any) => ({
+            id: issue.id,
+            number: issue.number,
+            title: issue.title,
+            url: issue.html_url,
+            state: issue.state,
+            createdAt: issue.created_at,
+            labels: issue.labels.map((label: any) => label.name)
+          }))
+        };
+      } catch (error) {
+        console.error('GitHub issues fetch error:', error);
+        throw new Error(`Failed to fetch GitHub issues: ${error.message}`);
+      }
+    
+    case 'test_connection':
+      try {
+        const response = await fetch('https://api.github.com/user', {
+          headers: {
+            'Authorization': `Bearer ${config.access_token}`,
+            'Accept': 'application/vnd.github.v3+json',
+            'User-Agent': 'Cognitex-Integration'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`GitHub connection test failed: ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        return { 
+          message: 'GitHub connection test successful',
+          user: userData.login || userData.name
+        };
+      } catch (error) {
+        throw new Error(`GitHub connection test failed: ${error.message}`);
+      }
+      
+    default:
+      throw new Error(`Unsupported GitHub action: ${action}`);
   }
 }
 

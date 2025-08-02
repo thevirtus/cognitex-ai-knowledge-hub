@@ -173,42 +173,45 @@ export const IntegrationsManager = ({ teamId }: IntegrationsManagerProps) => {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {filteredIntegrations.map((integration) => {
-          const integrationWithStatus = getIntegrationWithStatus(integration);
-          
-           return integration.useOAuth ? (
-            <OAuthIntegration
-              key={integration.type}
-              integration={{
-                id: integration.type,
-                name: integration.name,
-                description: integration.description,
-                icon: typeof integration.icon === 'string' ? integration.icon : '🔗',
-                category: integration.category,
-                status: integration.status as 'available' | 'beta' | 'coming_soon'
-              }}
-              teamId={teamId}
-              isConnected={integrationWithStatus.isConnected}
-              onConnectionChange={loadIntegrations}
-            />
-          ) : (
-            <IntegrationCard
-              key={integration.type}
-              integration={integrationWithStatus}
-              teamId={teamId}
-              onUpdate={loadIntegrations}
-            />
-          );
-        })}
+        {filteredIntegrations
+          .map((integration) => getIntegrationWithStatus(integration))
+          .filter((integration) => integration.isConnected)
+          .map((integrationWithStatus) => {
+            const originalIntegration = availableIntegrations.find(i => i.type === integrationWithStatus.type);
+            
+            return originalIntegration?.useOAuth ? (
+              <OAuthIntegration
+                key={integrationWithStatus.type}
+                integration={{
+                  id: integrationWithStatus.type,
+                  name: integrationWithStatus.name,
+                  description: integrationWithStatus.description,
+                  icon: typeof integrationWithStatus.icon === 'string' ? integrationWithStatus.icon : '🔗',
+                  category: integrationWithStatus.category,
+                  status: integrationWithStatus.status as 'available' | 'beta' | 'coming_soon'
+                }}
+                teamId={teamId}
+                isConnected={integrationWithStatus.isConnected}
+                onConnectionChange={loadIntegrations}
+              />
+            ) : (
+              <IntegrationCard
+                key={integrationWithStatus.type}
+                integration={integrationWithStatus}
+                teamId={teamId}
+                onUpdate={loadIntegrations}
+              />
+            );
+          })}
       </div>
 
-      {filteredIntegrations.length === 0 && (
+      {filteredIntegrations.filter(integration => getIntegrationWithStatus(integration).isConnected).length === 0 && (
         <Card className="shadow-sm border">
           <CardContent className="text-center py-8">
             <Database className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No integrations found</h3>
+            <h3 className="text-lg font-semibold mb-2">No connected integrations</h3>
             <p className="text-muted-foreground">
-              Try adjusting your search terms to find the integration you're looking for.
+              Connect integrations from the main integrations page to see them here.
             </p>
           </CardContent>
         </Card>
