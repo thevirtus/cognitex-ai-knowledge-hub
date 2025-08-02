@@ -1,1 +1,43 @@
 project_id = "gheecokmulrlxzgahyrq"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[auth]
+enabled = true
+port = 54322
+site_url = "https://gheecokmulrlxzgahyrq.supabase.co"
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+refresh_token_rotation = true
+cors_headers = "*"
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+
+[[auth.providers.email]]
+enabled = true
+
+[db]
+port = 54322
+
+[functions.google-oauth]
+verify_jwt = false
+
+[functions.notion-oauth]
+verify_jwt = false
+
+[functions.github-oauth]
+verify_jwt = false
+
+[functions.accept-team-invite]
+verify_jwt = false
+
+[functions.send-email]
+verify_jwt = false

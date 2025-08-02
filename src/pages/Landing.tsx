@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export const Landing = () => {
   return (
-    <div className="min-h-screen gradient-subtle">
+    <div className="min-h-screen clean-bg">
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -22,7 +22,7 @@ export const Landing = () => {
               <div className="flex gap-4 justify-center lg:justify-start">
                 <Button 
                   size="lg" 
-                  className="shadow-glow transition-smooth"
+                 className="shadow-md transition-smooth"
                   onClick={() => window.open('/auth', '_self')}
                 >
                   Get Started Free
@@ -40,7 +40,7 @@ export const Landing = () => {
             {/* Right Column - Visual */}
             <div className="flex items-center justify-center">
               <div className="relative">
-                <div className="w-80 h-80 bg-gradient-to-br from-primary/20 to-primary/5 rounded-full flex items-center justify-center shadow-elegant">
+                <div className="w-80 h-80 bg-primary/10 rounded-full flex items-center justify-center shadow-md">
                   <Brain className="h-32 w-32 text-primary animate-pulse" />
                 </div>
                 <div className="absolute -top-4 -right-4 w-20 h-20 bg-accent/20 rounded-full flex items-center justify-center">
@@ -62,7 +62,7 @@ export const Landing = () => {
             Powerful Features for Modern Teams
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="shadow-elegant border-0">
+            <Card className="shadow-sm border">
               <CardHeader>
                 <FileText className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Smart Document Management</CardTitle>
@@ -72,7 +72,7 @@ export const Landing = () => {
               </CardHeader>
             </Card>
             
-            <Card className="shadow-elegant border-0">
+            <Card className="shadow-sm border">
               <CardHeader>
                 <MessageSquare className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>AI-Powered Chat</CardTitle>
@@ -82,7 +82,7 @@ export const Landing = () => {
               </CardHeader>
             </Card>
             
-            <Card className="shadow-elegant border-0">
+            <Card className="shadow-sm border">
               <CardHeader>
                 <Users className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Team Collaboration</CardTitle>
@@ -92,7 +92,7 @@ export const Landing = () => {
               </CardHeader>
             </Card>
             
-            <Card className="shadow-elegant border-0">
+            <Card className="shadow-sm border">
               <CardHeader>
                 <Shield className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Enterprise Security</CardTitle>
@@ -102,7 +102,7 @@ export const Landing = () => {
               </CardHeader>
             </Card>
             
-            <Card className="shadow-elegant border-0">
+            <Card className="shadow-sm border">
               <CardHeader>
                 <Zap className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Integrations</CardTitle>
@@ -112,7 +112,7 @@ export const Landing = () => {
               </CardHeader>
             </Card>
             
-            <Card className="shadow-elegant border-0">
+            <Card className="shadow-sm border">
               <CardHeader>
                 <Brain className="h-8 w-8 text-primary mb-2" />
                 <CardTitle>Advanced AI</CardTitle>
@@ -136,7 +136,7 @@ export const Landing = () => {
           </p>
           <Button 
             size="lg" 
-            className="shadow-glow transition-smooth"
+            className="shadow-md transition-smooth"
             onClick={() => window.open('/auth', '_self')}
           >
             Start Your Free Trial

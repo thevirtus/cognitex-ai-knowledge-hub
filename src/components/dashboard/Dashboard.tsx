@@ -9,6 +9,7 @@ import { InviteTeamMemberDialog } from './InviteTeamMemberDialog';
 import { IntegrationsManager } from '@/components/integrations/IntegrationsManager';
 import { Tables } from '@/integrations/supabase/types';
 import { DocumentManager } from '@/components/documents/DocumentManager';
+import { IntegratedDocument } from '@/components/integrations/IntegratedDocument';
 import { AIChat } from '@/components/chat/AIChat';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -320,7 +321,7 @@ export const Dashboard = ({ user, defaultTab }: DashboardProps) => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="documents" className="mt-6">
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-2xl font-bold">Team Documents</h2>
                   <Button onClick={handleCreateDocument} disabled={!team}>
@@ -329,6 +330,7 @@ export const Dashboard = ({ user, defaultTab }: DashboardProps) => {
                   </Button>
                 </div>
                 <DocumentManager user={user} teamId={team?.id || ''} />
+                {team?.id && <IntegratedDocument teamId={team.id} />}
               </div>
             </TabsContent>
             <TabsContent value="chat" className="mt-6">

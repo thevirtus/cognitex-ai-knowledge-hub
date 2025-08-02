@@ -149,7 +149,7 @@ export const IntegrationsManager = ({ teamId }: IntegrationsManagerProps) => {
 
   return (
     <div className="space-y-6">
-      <Card className="shadow-elegant border-0">
+      <Card className="shadow-sm border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Database className="h-5 w-5" />
@@ -203,7 +203,7 @@ export const IntegrationsManager = ({ teamId }: IntegrationsManagerProps) => {
       </div>
 
       {filteredIntegrations.length === 0 && (
-        <Card className="shadow-elegant border-0">
+        <Card className="shadow-sm border">
           <CardContent className="text-center py-8">
             <Database className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No integrations found</h3>
