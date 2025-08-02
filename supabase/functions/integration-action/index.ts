@@ -31,6 +31,9 @@ serve(async (req) => {
     let result;
 
     switch (integration.integration_type) {
+      case 'notion':
+        result = await handleNotionAction(integration, action, data);
+        break;
       case 'slack':
         result = await handleSlackAction(integration, action, data);
         break;
@@ -78,6 +81,79 @@ serve(async (req) => {
     });
   }
 });
+
+async function handleNotionAction(integration: any, action: string, data: any) {
+  const config = integration.config;
+  
+  switch (action) {
+    case 'fetch_documents':
+      try {
+        const response = await fetch('https://api.notion.com/v1/search', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${config.access_token}`,
+            'Content-Type': 'application/json',
+            'Notion-Version': '2022-06-28'
+          },
+          body: JSON.stringify({
+            filter: {
+              property: 'object',
+              value: 'page'
+            },
+            sort: {
+              direction: 'descending',
+              timestamp: 'last_edited_time'
+            }
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`Notion API error: ${response.statusText}`);
+        }
+
+        const notionData = await response.json();
+        
+        return {
+          message: 'Documents fetched successfully',
+          documents: notionData.results?.map((page: any) => ({
+            id: page.id,
+            title: page.properties?.title?.title?.[0]?.text?.content || 'Untitled',
+            url: page.url,
+            lastEdited: page.last_edited_time,
+            createdTime: page.created_time
+          })) || []
+        };
+      } catch (error) {
+        console.error('Notion fetch error:', error);
+        throw new Error(`Failed to fetch Notion documents: ${error.message}`);
+      }
+    
+    case 'test_connection':
+      try {
+        const response = await fetch('https://api.notion.com/v1/users/me', {
+          headers: {
+            'Authorization': `Bearer ${config.access_token}`,
+            'Notion-Version': '2022-06-28'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Notion connection test failed: ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        return { 
+          message: 'Notion connection test successful',
+          user: userData.name || userData.id
+        };
+      } catch (error) {
+        throw new Error(`Notion connection test failed: ${error.message}`);
+      }
+      
+    default:
+      throw new Error(`Unsupported Notion action: ${action}`);
+  }
+}
 
 async function handleSlackAction(integration: any, action: string, data: any) {
   const config = integration.config;
