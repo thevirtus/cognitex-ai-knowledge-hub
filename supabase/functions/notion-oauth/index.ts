@@ -18,7 +18,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const url = new URL(req.url);
-    const integrationId = url.searchParams.get('integration_id');
+    const integrationId = url.searchParams.get('integration_id') || url.searchParams.get('state');
     const code = url.searchParams.get('code');
 
     if (!integrationId) {
@@ -36,7 +36,7 @@ const handler = async (req: Request): Promise<Response> => {
         body: JSON.stringify({
           grant_type: 'authorization_code',
           code,
-          redirect_uri: `${Deno.env.get('SUPABASE_URL')}/functions/v1/notion-oauth?integration_id=${integrationId}`,
+          redirect_uri: `${Deno.env.get('SUPABASE_URL')}/functions/v1/notion-oauth`,
         }),
       });
 
@@ -99,11 +99,13 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Initial OAuth redirect
+    const redirectUri = `${Deno.env.get('SUPABASE_URL')}/functions/v1/notion-oauth`;
     const authUrl = `https://api.notion.com/v1/oauth/authorize?` + new URLSearchParams({
       client_id: Deno.env.get('NOTION_CLIENT_ID') ?? '',
       response_type: 'code',
       owner: 'user',
-      redirect_uri: `${Deno.env.get('SUPABASE_URL')}/functions/v1/notion-oauth?integration_id=${integrationId}`,
+      redirect_uri: redirectUri,
+      state: integrationId,
     });
 
     return Response.redirect(authUrl);

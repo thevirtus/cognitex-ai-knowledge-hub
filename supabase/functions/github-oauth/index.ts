@@ -42,9 +42,11 @@ serve(async (req) => {
         throw new Error('GitHub client ID not configured');
       }
 
+      const redirectUri = `${Deno.env.get('SUPABASE_URL')}/functions/v1/github-oauth`;
+      
       const githubAuthUrl = `https://github.com/login/oauth/authorize?` +
         `client_id=${clientId}&` +
-        `redirect_uri=${encodeURIComponent(req.url.split('?')[0])}&` +
+        `redirect_uri=${encodeURIComponent(redirectUri)}&` +
         `scope=repo,user:email&` +
         `state=${integrationId}`;
 
@@ -69,6 +71,8 @@ serve(async (req) => {
 
     console.log('Exchanging code for token...');
 
+    const redirectUri = `${Deno.env.get('SUPABASE_URL')}/functions/v1/github-oauth`;
+
     const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
       headers: {
@@ -79,6 +83,7 @@ serve(async (req) => {
         client_id: clientId,
         client_secret: clientSecret,
         code: code,
+        redirect_uri: redirectUri,
       }),
     });
 
