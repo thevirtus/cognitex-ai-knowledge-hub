@@ -45,16 +45,37 @@ export const IntegratedDocument = ({ integration, onViewContent }: IntegratedDoc
         throw new Error(`Unsupported integration type: ${integration.integration_type}`);
       }
 
-      const { data, error } = await supabase.functions.invoke(functionName, {
-        body: {
+      let requestBody: any = {};
+
+      // Handle different integration types with their specific requirements
+      if (integration.integration_type === 'google_drive') {
+        // For Google Drive, use the folder_id from config
+        requestBody = {
+          folderId: integration.config?.folder_id || 'root'
+        };
+      } else {
+        // For other integrations, use standard format
+        requestBody = {
           integrationId: integration.id,
           action: 'list_documents'
-        }
+        };
+      }
+
+      const { data, error } = await supabase.functions.invoke(functionName, {
+        body: requestBody
       });
 
       if (error) throw error;
 
-      setDocuments(data.documents || []);
+      // Handle different response formats
+      let documents = [];
+      if (integration.integration_type === 'google_drive') {
+        documents = data.files || [];
+      } else {
+        documents = data.documents || data.files || [];
+      }
+
+      setDocuments(documents);
       setLastSync(new Date());
     } catch (error: any) {
       toast({
@@ -95,22 +116,45 @@ export const IntegratedDocument = ({ integration, onViewContent }: IntegratedDoc
 
   const handleViewDocument = async (doc: any) => {
     try {
+      // For documents that already have content, show it directly
+      if (doc.content) {
+        onViewContent({
+          title: doc.name || doc.title,
+          content: doc.content,
+          type: integration.integration_type,
+          source: integration.integration_name,
+          url: doc.webViewLink || doc.url
+        });
+        return;
+      }
+
       const functionName = getFunctionName(integration.integration_type);
       if (!functionName) return;
 
-      const { data, error } = await supabase.functions.invoke(functionName, {
-        body: {
+      let requestBody: any = {};
+      
+      if (integration.integration_type === 'google_drive') {
+        requestBody = {
+          fileId: doc.id,
+          action: 'get_content'
+        };
+      } else {
+        requestBody = {
           integrationId: integration.id,
           action: 'get_content',
           documentId: doc.id
-        }
+        };
+      }
+
+      const { data, error } = await supabase.functions.invoke(functionName, {
+        body: requestBody
       });
 
       if (error) throw error;
 
       onViewContent({
         title: doc.name || doc.title,
-        content: data.content,
+        content: data.content || 'No content available',
         type: integration.integration_type,
         source: integration.integration_name,
         url: doc.webViewLink || doc.url

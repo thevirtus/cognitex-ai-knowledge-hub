@@ -175,7 +175,6 @@ export const IntegrationsManager = ({ teamId }: IntegrationsManagerProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredIntegrations
           .map((integration) => getIntegrationWithStatus(integration))
-          .filter((integration) => integration.isConnected)
           .map((integrationWithStatus) => {
             const originalIntegration = availableIntegrations.find(i => i.type === integrationWithStatus.type);
             
@@ -205,13 +204,13 @@ export const IntegrationsManager = ({ teamId }: IntegrationsManagerProps) => {
           })}
       </div>
 
-      {filteredIntegrations.filter(integration => getIntegrationWithStatus(integration).isConnected).length === 0 && (
+      {filteredIntegrations.length === 0 && (
         <Card className="shadow-sm border">
           <CardContent className="text-center py-8">
             <Database className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No connected integrations</h3>
+            <h3 className="text-lg font-semibold mb-2">No integrations found</h3>
             <p className="text-muted-foreground">
-              Connect integrations from the main integrations page to see them here.
+              Try adjusting your search criteria.
             </p>
           </CardContent>
         </Card>
