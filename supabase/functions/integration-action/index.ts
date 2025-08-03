@@ -410,31 +410,37 @@ async function handleEmailAction(integration: any, action: string, data: any) {
   
   switch (action) {
     case 'send_email':
-      // Use existing send-email function
-      const { data: emailResult, error: emailError } = await supabase.functions.invoke('send-email', {
-        body: {
-          to: config.email,
-          subject: data.subject || 'Cognitex Notification',
-          html: data.message || data.html,
-          from: 'connectcognitex@gmail.com'
-        }
+      // Call the send-email function directly with Resend
+      const resend = await import("npm:resend@4.0.0");
+      const resendClient = new resend.Resend(Deno.env.get("RESEND_API_KEY"));
+      
+      const emailResponse = await resendClient.emails.send({
+        from: "Cognitex <connectcognitex@gmail.com>",
+        to: [config.email],
+        subject: data.subject || 'Cognitex Notification',
+        html: data.message || data.html || '<p>Notification from Cognitex</p>',
       });
       
-      if (emailError) throw emailError;
+      if (emailResponse.error) {
+        throw new Error(`Email sending failed: ${emailResponse.error.message}`);
+      }
       
-      return { message: 'Email sent successfully', result: emailResult };
+      return { message: 'Email sent successfully', result: emailResponse };
     
     case 'test_connection':
-      const { data: testResult, error: testError } = await supabase.functions.invoke('send-email', {
-        body: {
-          to: config.email,
-          subject: 'Cognitex Integration Test',
-          html: '<h2>🔧 Integration Test</h2><p>Your Cognitex email integration is working correctly!</p>',
-          from: 'connectcognitex@gmail.com'
-        }
+      const resendTest = await import("npm:resend@4.0.0");
+      const resendTestClient = new resendTest.Resend(Deno.env.get("RESEND_API_KEY"));
+      
+      const testResponse = await resendTestClient.emails.send({
+        from: "Cognitex <connectcognitex@gmail.com>",
+        to: [config.email],
+        subject: 'Cognitex Integration Test',
+        html: '<h2>🔧 Integration Test</h2><p>Your Cognitex email integration is working correctly!</p>',
       });
       
-      if (testError) throw testError;
+      if (testResponse.error) {
+        throw new Error(`Test email failed: ${testResponse.error.message}`);
+      }
       
       return { message: 'Test email sent successfully' };
       
