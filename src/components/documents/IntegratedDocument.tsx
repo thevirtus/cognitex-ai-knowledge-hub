@@ -40,39 +40,46 @@ export const IntegratedDocument = ({ integration, onViewContent }: IntegratedDoc
   const fetchDocuments = async () => {
     setIsLoading(true);
     try {
-      const functionName = getFunctionName(integration.integration_type);
-      if (!functionName) {
-        throw new Error(`Unsupported integration type: ${integration.integration_type}`);
-      }
-
-      let requestBody: any = {};
+      let data, error;
 
       // Handle different integration types with their specific requirements
       if (integration.integration_type === 'google_drive') {
-        // For Google Drive, use the folder_id from config
-        requestBody = {
-          folderId: integration.config?.folder_id || 'root'
-        };
+        // For Google Drive, use the dedicated fetch-google-drive function
+        const response = await supabase.functions.invoke('fetch-google-drive', {
+          body: {
+            folderId: integration.config?.folder_id || 'root'
+          }
+        });
+        data = response.data;
+        error = response.error;
+      } else if (['notion', 'github', 'slack', 'discord', 'email', 'webhook'].includes(integration.integration_type)) {
+        // For other integrations, use the integration-action function
+        const response = await supabase.functions.invoke('integration-action', {
+          body: {
+            integrationId: integration.id,
+            action: integration.integration_type === 'notion' ? 'fetch_documents' : 
+                   integration.integration_type === 'github' ? 'fetch_repositories' : 
+                   'test_connection'
+          }
+        });
+        data = response.data;
+        error = response.error;
       } else {
-        // For other integrations, use standard format
-        requestBody = {
-          integrationId: integration.id,
-          action: 'list_documents'
-        };
+        throw new Error(`Unsupported integration type: ${integration.integration_type}`);
       }
-
-      const { data, error } = await supabase.functions.invoke(functionName, {
-        body: requestBody
-      });
 
       if (error) throw error;
 
       // Handle different response formats
       let documents = [];
       if (integration.integration_type === 'google_drive') {
-        documents = data.files || [];
+        documents = data?.files || [];
+      } else if (integration.integration_type === 'notion') {
+        documents = data?.result?.documents || [];
+      } else if (integration.integration_type === 'github') {
+        documents = data?.result?.repositories || [];
       } else {
-        documents = data.documents || data.files || [];
+        documents = [];
       }
 
       setDocuments(documents);
@@ -123,42 +130,20 @@ export const IntegratedDocument = ({ integration, onViewContent }: IntegratedDoc
           content: doc.content,
           type: integration.integration_type,
           source: integration.integration_name,
-          url: doc.webViewLink || doc.url
+          url: doc.webViewLink || doc.url || doc.html_url
         });
         return;
       }
 
-      const functionName = getFunctionName(integration.integration_type);
-      if (!functionName) return;
-
-      let requestBody: any = {};
-      
-      if (integration.integration_type === 'google_drive') {
-        requestBody = {
-          fileId: doc.id,
-          action: 'get_content'
-        };
-      } else {
-        requestBody = {
-          integrationId: integration.id,
-          action: 'get_content',
-          documentId: doc.id
-        };
-      }
-
-      const { data, error } = await supabase.functions.invoke(functionName, {
-        body: requestBody
-      });
-
-      if (error) throw error;
-
+      // If no content available, show basic document info
       onViewContent({
-        title: doc.name || doc.title,
-        content: data.content || 'No content available',
+        title: doc.name || doc.title || doc.fullName,
+        content: doc.description || 'No content preview available for this document.',
         type: integration.integration_type,
         source: integration.integration_name,
-        url: doc.webViewLink || doc.url
+        url: doc.webViewLink || doc.url || doc.html_url
       });
+
     } catch (error: any) {
       toast({
         title: "Error loading document",
@@ -233,9 +218,9 @@ export const IntegratedDocument = ({ integration, onViewContent }: IntegratedDoc
                   <div className="flex items-center space-x-2 flex-1 min-w-0">
                     <FileText className="h-4 w-4 text-blue-600 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium truncate">{doc.name || doc.title}</p>
-                      {doc.size && (
-                        <p className="text-xs text-muted-foreground">{doc.size}</p>
+                      <p className="font-medium truncate">{doc.name || doc.title || doc.fullName}</p>
+                      {(doc.size || doc.description) && (
+                        <p className="text-xs text-muted-foreground">{doc.size || doc.description}</p>
                       )}
                     </div>
                   </div>
@@ -247,11 +232,11 @@ export const IntegratedDocument = ({ integration, onViewContent }: IntegratedDoc
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
-                    {doc.webViewLink && (
+                    {(doc.webViewLink || doc.url || doc.html_url) && (
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => window.open(doc.webViewLink, '_blank')}
+                        onClick={() => window.open(doc.webViewLink || doc.url || doc.html_url, '_blank')}
                       >
                         <ExternalLink className="h-4 w-4" />
                       </Button>
