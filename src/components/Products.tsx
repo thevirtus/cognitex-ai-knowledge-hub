@@ -122,7 +122,11 @@ export const Products = () => {
                   </div>
                 </div>
 
-                <Button variant="default" className="w-full">
+                <Button 
+                  variant="default" 
+                  className="w-full"
+                  onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+                >
                   <ShoppingCart className="h-4 w-4" />
                   Add to Cart
                 </Button>
