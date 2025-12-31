@@ -42,8 +42,8 @@ export const Header = () => {
             <a
               key={link.name}
               href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-primary ${
-                isScrolled ? "text-foreground" : "text-foreground/80"
+              className={`text-sm font-medium transition-colors ${
+                isScrolled ? "text-foreground hover:text-primary" : "text-white hover:text-white/80"
               }`}
             >
               {link.name}
@@ -52,7 +52,7 @@ export const Header = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className={isScrolled ? "" : "text-white hover:text-white/80 hover:bg-white/10"}>
             <ShoppingCart className="h-5 w-5" />
           </Button>
           <Button 
@@ -70,9 +70,9 @@ export const Header = () => {
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
-            <X className="h-6 w-6 text-foreground" />
+            <X className={`h-6 w-6 ${isScrolled ? "text-foreground" : "text-white"}`} />
           ) : (
-            <Menu className="h-6 w-6 text-foreground" />
+            <Menu className={`h-6 w-6 ${isScrolled ? "text-foreground" : "text-white"}`} />
           )}
         </button>
       </div>

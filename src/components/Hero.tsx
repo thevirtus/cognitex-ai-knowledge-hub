@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Snowflake, ArrowRight } from "lucide-react";
+import { Snowflake, ArrowRight, ChevronDown } from "lucide-react";
 import heroImage from "@/assets/hero-cold-plunge.jpg";
 
 export const Hero = () => {
@@ -43,7 +43,9 @@ export const Hero = () => {
             className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight mb-6"
           >
             Embrace the
-            <span className="block">Cold Revolution</span>
+            <span className="block">
+              <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary))] [text-shadow:0_0_30px_hsl(var(--primary)/0.6)]">Cold</span> Revolution
+            </span>
           </motion.h1>
 
           <motion.p
@@ -114,9 +116,8 @@ export const Hero = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-primary-foreground/40 flex items-start justify-center p-2"
         >
-          <div className="w-1 h-2 bg-primary-foreground/60 rounded-full" />
+          <ChevronDown className="h-8 w-8 text-primary-foreground/70 hover:text-primary-foreground transition-colors" />
         </motion.div>
       </motion.div>
     </section>
