@@ -9,7 +9,7 @@ const products = [
   {
     id: 1,
     name: "Arctic Pro",
-    description: "Our flagship model with advanced cooling technology and premium materials.",
+    description: "Advanced cooling technology with premium build quality for serious enthusiasts.",
     price: "$4,995",
     image: productArctic,
     specs: {
@@ -22,7 +22,7 @@ const products = [
   {
     id: 2,
     name: "Glacier Elite",
-    description: "Luxury meets performance with sleek white design and chrome accents.",
+    description: "Sleek white design with chrome accents for a luxury wellness experience.",
     price: "$6,495",
     image: productGlacier,
     specs: {
