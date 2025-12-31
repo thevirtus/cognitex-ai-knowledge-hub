@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Instagram, Twitter, Facebook, Youtube } from "lucide-react";
+import { Mail, Instagram, Twitter, Facebook, Youtube } from "lucide-react";
 import logo from "@/assets/frosthaven-logo.png";
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="bg-foreground text-primary-foreground">
+    <footer className="bg-foreground text-primary-foreground">
       {/* CTA Section */}
       <div className="border-b border-primary-foreground/10">
         <div className="container mx-auto py-16 px-4">
@@ -20,15 +20,15 @@ export const Footer = () => {
               Ready to Transform Your Wellness?
             </h2>
             <p className="text-primary-foreground/70 mb-8">
-              Join thousands who have discovered the power of cold therapy with
-              Frosthaven. Get started today with free shipping on all orders.
+              Join thousands who have discovered the power of cold therapy.
+              Free shipping on all orders.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="hero" size="lg">
                 Shop Now
               </Button>
               <Button variant="heroOutline" size="lg">
-                Contact Sales
+                Contact Us
               </Button>
             </div>
           </motion.div>
@@ -42,8 +42,8 @@ export const Footer = () => {
           <div>
             <img src={logo} alt="Frosthaven" className="h-10 w-auto mb-6 brightness-0 invert" />
             <p className="text-primary-foreground/60 text-sm mb-6">
-              Premium cold plunge tubs engineered for performance and designed
-              for luxury.
+              Premium cold plunge tubs curated for recovery, wellness, and
+              rejuvenation.
             </p>
             <div className="flex gap-4">
               {[Instagram, Twitter, Facebook, Youtube].map((Icon, index) => (
@@ -102,21 +102,11 @@ export const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-6">Contact Us</h4>
-            <ul className="space-y-4 text-sm text-primary-foreground/60">
-              <li className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-primary" />
-                hello@frosthaven.com
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-primary" />
-                1-800-FROST-TUB
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-primary shrink-0" />
-                <span>123 Glacier Way<br />Denver, CO 80202</span>
-              </li>
-            </ul>
+            <h4 className="font-semibold mb-6">Contact</h4>
+            <div className="flex items-center gap-3 text-sm text-primary-foreground/60">
+              <Mail className="h-5 w-5 text-primary" />
+              frosthaventubs@gmail.com
+            </div>
           </div>
         </div>
 

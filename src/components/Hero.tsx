@@ -52,8 +52,8 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-lg md:text-xl text-primary-foreground/80 max-w-xl mb-8"
           >
-            Transform your wellness routine with our premium cold plunge tubs.
-            Engineered for performance, designed for luxury.
+            Discover premium cold plunge tubs curated for recovery, wellness,
+            and rejuvenation. Experience the benefits of cold therapy at home.
           </motion.p>
 
           <motion.div
@@ -63,7 +63,7 @@ export const Hero = () => {
             className="flex flex-col sm:flex-row gap-4"
           >
             <Button variant="hero" size="xl">
-              Explore Collection
+              Shop Now
               <ArrowRight className="h-5 w-5" />
             </Button>
             <Button variant="heroOutline" size="xl">
@@ -82,8 +82,8 @@ export const Hero = () => {
           {[
             { value: "39°F", label: "Min Temperature" },
             { value: "5,000+", label: "Happy Customers" },
-            { value: "10yr", label: "Warranty" },
-            { value: "48hr", label: "Fast Shipping" },
+            { value: "Free", label: "Shipping" },
+            { value: "24/7", label: "Support" },
           ].map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-2xl md:text-3xl font-bold text-primary-foreground">

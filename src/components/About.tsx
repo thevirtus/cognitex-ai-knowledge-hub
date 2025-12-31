@@ -1,27 +1,26 @@
 import { motion } from "framer-motion";
-import { Award, Leaf, Shield, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Heart, Leaf, Shield, Truck } from "lucide-react";
 
 const features = [
   {
-    icon: Zap,
-    title: "Rapid Cooling",
-    description: "Reach target temperature in under 2 hours with our advanced cooling system.",
+    icon: Heart,
+    title: "Wellness First",
+    description: "Cold therapy supports recovery, reduces inflammation, and boosts mental clarity.",
   },
   {
     icon: Shield,
-    title: "Built to Last",
-    description: "Premium materials and 10-year warranty ensure lasting performance.",
+    title: "Quality Assured",
+    description: "Every tub we offer is carefully selected for durability and performance.",
   },
   {
     icon: Leaf,
-    title: "Eco-Friendly",
-    description: "Energy-efficient design with sustainable materials and low power consumption.",
+    title: "Eco-Conscious",
+    description: "Energy-efficient models that minimize environmental impact.",
   },
   {
-    icon: Award,
-    title: "Award-Winning",
-    description: "Recognized by wellness experts for excellence in cold therapy innovation.",
+    icon: Truck,
+    title: "Fast Delivery",
+    description: "Free shipping with quick, reliable delivery right to your door.",
   },
 ];
 
@@ -38,26 +37,23 @@ export const About = () => {
             transition={{ duration: 0.6 }}
           >
             <span className="text-primary font-medium text-sm uppercase tracking-wider">
-              Our Story
+              Our Mission
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-3 mb-6">
-              Pioneering Cold Therapy Excellence
+              Making Cold Therapy Accessible
             </h2>
             <p className="text-muted-foreground mb-6 leading-relaxed">
-              Founded in 2019, Frosthaven was born from a simple belief: everyone
-              deserves access to the transformative power of cold therapy. What
-              started as a quest for the perfect cold plunge has evolved into a
-              mission to bring premium wellness experiences to homes worldwide.
+              At Frosthaven Tubs, we believe everyone deserves access to the
+              transformative benefits of cold plunge therapy. We've partnered
+              with top manufacturers to bring you premium cold plunge tubs at
+              accessible prices.
             </p>
             <p className="text-muted-foreground mb-8 leading-relaxed">
-              Our team of engineers, wellness experts, and athletes work together
-              to design tubs that don't just meet expectations—they redefine them.
-              Every Frosthaven tub is a testament to our commitment to quality,
-              innovation, and your well-being.
+              Whether you're an athlete seeking faster recovery, a wellness
+              enthusiast exploring new routines, or simply curious about cold
+              therapy—we're here to help you find the perfect tub for your
+              lifestyle.
             </p>
-            <Button variant="default" size="lg">
-              Learn Our Story
-            </Button>
           </motion.div>
 
           {/* Features Grid */}
