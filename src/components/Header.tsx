@@ -37,7 +37,7 @@ export const Header = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -55,7 +55,12 @@ export const Header = () => {
           <Button variant="ghost" size="icon">
             <ShoppingCart className="h-5 w-5" />
           </Button>
-          <Button variant="default">Shop Now</Button>
+          <Button 
+            variant="default"
+            onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
+          >
+            Shop Now
+          </Button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -97,7 +102,14 @@ export const Header = () => {
                   <ShoppingCart className="h-5 w-5 mr-2" />
                   Cart
                 </Button>
-                <Button variant="default" className="w-full">
+                <Button 
+                  variant="default" 
+                  className="w-full"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                >
                   Shop Now
                 </Button>
               </div>

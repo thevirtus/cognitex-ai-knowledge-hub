@@ -62,7 +62,11 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Button variant="hero" size="xl">
+            <Button 
+              variant="hero" 
+              size="xl"
+              onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
+            >
               Shop Now
               <ArrowRight className="h-5 w-5" />
             </Button>
