@@ -142,7 +142,11 @@ export const Products = () => {
           transition={{ delay: 0.5 }}
           className="text-center mt-12"
         >
-          <Button variant="outline" size="lg">
+          <Button 
+            variant="outline" 
+            size="lg"
+            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+          >
             View All Products
           </Button>
         </motion.div>
