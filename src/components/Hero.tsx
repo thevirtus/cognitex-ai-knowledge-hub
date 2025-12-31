@@ -72,7 +72,11 @@ export const Hero = () => {
               Shop Now
               <ArrowRight className="h-5 w-5" />
             </Button>
-            <Button variant="heroOutline" size="xl">
+            <Button 
+              variant="heroOutline" 
+              size="xl"
+              onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
+            >
               Learn More
             </Button>
           </motion.div>
