@@ -44,7 +44,7 @@ export const Hero = () => {
           >
             Embrace the
             <span className="block">
-              <span className="text-primary drop-shadow-[0_0_20px_hsl(var(--primary))] [text-shadow:0_0_30px_hsl(var(--primary)/0.6)]">Cold</span> Revolution
+              <span className="text-primary drop-shadow-[0_0_10px_hsl(var(--primary)/0.4)] [text-shadow:0_0_15px_hsl(var(--primary)/0.3)]">Cold</span> Revolution
             </span>
           </motion.h1>
 
