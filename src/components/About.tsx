@@ -60,17 +60,13 @@ export const About = () => {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="grid sm:grid-cols-2 gap-6"
           >
             {features.map((feature, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 * index }}
                 className="bg-card rounded-xl p-6 shadow-soft hover:shadow-medium transition-all duration-300"
               >
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
@@ -82,7 +78,7 @@ export const About = () => {
                 <p className="text-sm text-muted-foreground">
                   {feature.description}
                 </p>
-              </motion.div>
+              </div>
             ))}
           </motion.div>
         </div>

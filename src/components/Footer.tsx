@@ -12,7 +12,7 @@ export const Footer = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-2xl mx-auto"
           >
@@ -105,7 +105,7 @@ export const Footer = () => {
             <h4 className="font-semibold mb-6">Contact</h4>
             <div className="flex items-center gap-3 text-sm text-primary-foreground/60">
               <Mail className="h-5 w-5 text-primary" />
-              frosthaventubs@gmail.com
+              info@frosthaventubs.com
             </div>
           </div>
         </div>
