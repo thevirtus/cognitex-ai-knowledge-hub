@@ -60,7 +60,7 @@ export const About = () => {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="grid sm:grid-cols-2 gap-6"
           >
