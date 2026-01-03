@@ -38,7 +38,7 @@ export const Testimonials = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
@@ -60,7 +60,7 @@ export const Testimonials = () => {
               key={testimonial.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-card rounded-xl p-8 shadow-soft hover:shadow-medium transition-all duration-300 relative"
             >

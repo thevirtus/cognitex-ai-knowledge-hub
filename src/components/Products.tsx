@@ -54,7 +54,7 @@ export const Products = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
@@ -76,7 +76,7 @@ export const Products = () => {
               key={product.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group frost-card overflow-hidden"
             >
@@ -138,7 +138,7 @@ export const Products = () => {
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true, amount: 0.25 }}
           transition={{ delay: 0.3 }}
           className="text-center mt-12"
         >
