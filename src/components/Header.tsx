@@ -2,18 +2,20 @@ import { useState, useEffect } from "react";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "@/assets/frosthaven-logo.png";
 
 const navLinks = [
-  { name: "Products", href: "#products" },
-  { name: "About", href: "#about" },
-  { name: "Testimonials", href: "#testimonials" },
-  { name: "Contact", href: "#contact" },
+  { name: "Products", href: "/products", isRoute: true },
+  { name: "About", href: "#about", isRoute: false },
+  { name: "Testimonials", href: "#testimonials", isRoute: false },
+  { name: "Contact", href: "#contact", isRoute: false },
 ];
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +24,19 @@ export const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavClick = (link: typeof navLinks[0]) => {
+    if (link.isRoute) {
+      navigate(link.href);
+    } else {
+      // If we're not on the home page, navigate there first with hash
+      if (window.location.pathname !== "/") {
+        window.location.href = "/" + link.href;
+      } else {
+        document.getElementById(link.href.replace("#", ""))?.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <header
@@ -32,22 +47,22 @@ export const Header = () => {
       }`}
     >
       <div className="container mx-auto flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <img src={logo} alt="Frosthaven" className="h-10 w-auto" />
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
-            <a
+            <button
               key={link.name}
-              href={link.href}
+              onClick={() => handleNavClick(link)}
               className={`text-sm font-medium transition-colors ${
                 isScrolled ? "text-foreground hover:text-primary" : "text-white hover:text-white/80"
               }`}
             >
               {link.name}
-            </a>
+            </button>
           ))}
         </nav>
 
@@ -57,7 +72,7 @@ export const Header = () => {
           </Button>
           <Button 
             variant="default"
-            onClick={() => document.getElementById("products")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => navigate("/products")}
           >
             Shop Now
           </Button>
@@ -88,14 +103,16 @@ export const Header = () => {
           >
             <nav className="container mx-auto py-6 flex flex-col gap-4">
               {navLinks.map((link) => (
-                <a
+                <button
                   key={link.name}
-                  href={link.href}
-                  className="text-foreground font-medium py-2 hover:text-primary transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleNavClick(link);
+                  }}
+                  className="text-foreground font-medium py-2 hover:text-primary transition-colors text-left"
                 >
                   {link.name}
-                </a>
+                </button>
               ))}
               <div className="flex flex-col gap-3 pt-4 border-t border-border">
                 <Button variant="outline" className="w-full">
@@ -107,7 +124,7 @@ export const Header = () => {
                   className="w-full"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+                    navigate("/products");
                   }}
                 >
                   Shop Now
