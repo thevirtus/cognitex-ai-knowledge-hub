@@ -1,9 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Thermometer, Droplets, Timer, ShoppingCart } from "lucide-react";
-import productArctic from "@/assets/product-arctic-pro.jpg";
-import productGlacier from "@/assets/product-glacier-elite.jpg";
-import productPolar from "@/assets/product-polar-compact.jpg";
+import { Link } from "react-router-dom";
 
 const products = [
   {
@@ -11,7 +9,7 @@ const products = [
     name: "Arctic Pro",
     description: "Advanced cooling technology with premium build quality for serious enthusiasts.",
     price: "$4,995",
-    image: productArctic,
+    image: null,
     specs: {
       temp: "39-60°F",
       capacity: "100 gal",
@@ -24,7 +22,7 @@ const products = [
     name: "Glacier Elite",
     description: "Sleek white design with chrome accents for a luxury wellness experience.",
     price: "$6,495",
-    image: productGlacier,
+    image: null,
     specs: {
       temp: "37-55°F",
       capacity: "120 gal",
@@ -37,7 +35,7 @@ const products = [
     name: "Polar Compact",
     description: "Perfect for home use with a smaller footprint and efficient cooling.",
     price: "$2,995",
-    image: productPolar,
+    image: null,
     specs: {
       temp: "42-65°F",
       capacity: "60 gal",
@@ -81,11 +79,9 @@ export const Products = () => {
               className="group frost-card overflow-hidden"
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                <div className="w-full h-64 bg-muted flex items-center justify-center">
+                  <span className="text-muted-foreground text-sm">Image Coming Soon</span>
+                </div>
                 {product.badge && (
                   <span className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-full">
                     {product.badge}
@@ -142,13 +138,14 @@ export const Products = () => {
           transition={{ delay: 0.3 }}
           className="text-center mt-12"
         >
-          <Button 
-            variant="outline" 
-            size="lg"
-            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            View All Products
-          </Button>
+          <Link to="/products">
+            <Button 
+              variant="outline" 
+              size="lg"
+            >
+              View All Products
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

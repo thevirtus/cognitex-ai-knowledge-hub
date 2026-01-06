@@ -1,35 +1,14 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
-const testimonials = [
-  {
-    id: 1,
-    name: "Michael Chen",
-    role: "Professional Athlete",
-    content:
-      "The Arctic Pro has completely transformed my recovery routine. I'm back to peak performance faster than ever. Worth every penny.",
-    rating: 5,
-    avatar: "MC",
-  },
-  {
-    id: 2,
-    name: "Sarah Williams",
-    role: "Wellness Coach",
-    content:
-      "I recommend Frosthaven to all my clients. The quality is unmatched, and the customer service is exceptional. A true game-changer.",
-    rating: 5,
-    avatar: "SW",
-  },
-  {
-    id: 3,
-    name: "David Park",
-    role: "Homeowner",
-    content:
-      "Setting up was surprisingly easy, and our whole family uses it. The Polar Compact fits perfectly in our backyard. Love it!",
-    rating: 5,
-    avatar: "DP",
-  },
-];
+const testimonials: {
+  id: number;
+  name: string;
+  role: string;
+  content: string;
+  rating: number;
+  avatar: string;
+}[] = [];
 
 export const Testimonials = () => {
   return (
