@@ -20,7 +20,7 @@ const SupportPage = () => {
             <div className="frost-card p-6 text-center">
               <Mail className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-semibold text-foreground mb-2">Email</h3>
-              <p className="text-sm text-muted-foreground">support@frosthaventubs.com</p>
+              <p className="text-sm text-muted-foreground">info@frosthaventubs.com</p>
             </div>
             <div className="frost-card p-6 text-center">
               <Clock className="h-8 w-8 text-primary mx-auto mb-3" />
