@@ -80,6 +80,15 @@ export const Hero = () => {
               Learn More
             </Button>
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="text-sm text-primary-foreground/60 mt-5"
+          >
+            Freight-Delivered Cold Plunge Systems Across the United States
+          </motion.p>
         </motion.div>
 
         {/* Stats */}
