@@ -1,149 +1,71 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Thermometer, Droplets, Timer, ShoppingCart } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Link } from "react-router-dom";
-
-const products = [
-  {
-    id: 1,
-    name: "Arctic Pro",
-    description: "Advanced cooling technology with premium build quality for serious enthusiasts.",
-    price: "$4,995",
-    image: null,
-    specs: {
-      temp: "39-60°F",
-      capacity: "100 gal",
-      time: "2hr cool",
-    },
-    badge: "Best Seller",
-  },
-  {
-    id: 2,
-    name: "Glacier Elite",
-    description: "Sleek white design with chrome accents for a luxury wellness experience.",
-    price: "$6,495",
-    image: null,
-    specs: {
-      temp: "37-55°F",
-      capacity: "120 gal",
-      time: "1.5hr cool",
-    },
-    badge: "Premium",
-  },
-  {
-    id: 3,
-    name: "Polar Compact",
-    description: "Perfect for home use with a smaller footprint and efficient cooling.",
-    price: "$2,995",
-    image: null,
-    specs: {
-      temp: "42-65°F",
-      capacity: "60 gal",
-      time: "3hr cool",
-    },
-    badge: null,
-  },
-];
+import { ProductCard } from "@/components/ProductCard";
+import { products } from "@/data/catalog";
+import { Search, SlidersHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ProductsPage = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const [priceFilter, setPriceFilter] = useState<string>("all");
+  const [availFilter, setAvailFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
+
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  const filtered = products.filter((p) => {
+    if (availFilter === "instock" && !p.inStock) return false;
+    if (priceFilter === "under1000" && p.priceNum >= 1000) return false;
+    if (priceFilter === "1000-5000" && (p.priceNum < 1000 || p.priceNum > 5000)) return false;
+    if (priceFilter === "over5000" && p.priceNum <= 5000) return false;
+    if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       <main className="pt-32 pb-20">
         <div className="container mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <Link 
-              to="/" 
-              className="text-primary font-medium text-sm uppercase tracking-wider hover:underline"
-            >
-              ← Back to Home
-            </Link>
-            <h1 className="text-3xl md:text-5xl font-bold text-foreground mt-6 mb-4">
-              Our Products
-            </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover our range of expertly crafted cold plunge tubs, designed to
-              deliver the ultimate cold therapy experience.
-            </p>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-12">
+            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4">Our Products</h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Discover our range of expertly crafted cold plunge tubs, designed to deliver the ultimate cold therapy experience.</p>
           </motion.div>
 
+          {/* Filters */}
+          <div className="flex flex-wrap gap-3 mb-10 items-center justify-center">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                placeholder="Search products..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring w-56"
+              />
+            </div>
+            <select value={priceFilter} onChange={(e) => setPriceFilter(e.target.value)} className="text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring">
+              <option value="all">All Prices</option>
+              <option value="under1000">Under $1,000</option>
+              <option value="1000-5000">$1,000 – $5,000</option>
+              <option value="over5000">Over $5,000</option>
+            </select>
+            <select value={availFilter} onChange={(e) => setAvailFilter(e.target.value)} className="text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring">
+              <option value="all">All Availability</option>
+              <option value="instock">In Stock</option>
+            </select>
+          </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group frost-card overflow-hidden"
-              >
-                <div className="relative overflow-hidden">
-                  <div className="w-full h-64 bg-muted flex items-center justify-center">
-                    <span className="text-muted-foreground text-sm">Image Coming Soon</span>
-                  </div>
-                  {product.badge && (
-                    <span className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-full">
-                      {product.badge}
-                    </span>
-                  )}
-                </div>
-
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-semibold text-foreground">
-                      {product.name}
-                    </h3>
-                    <span className="text-lg font-bold text-primary">
-                      {product.price}
-                    </span>
-                  </div>
-
-                  <p className="text-muted-foreground text-sm mb-4">
-                    {product.description}
-                  </p>
-
-                  <div className="flex gap-4 mb-6 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Thermometer className="h-4 w-4 text-primary" />
-                      {product.specs.temp}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Droplets className="h-4 w-4 text-primary" />
-                      {product.specs.capacity}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Timer className="h-4 w-4 text-primary" />
-                      {product.specs.time}
-                    </div>
-                  </div>
-
-                  <Button 
-                    variant="default" 
-                    className="w-full"
-                    onClick={() => window.location.href = "/#contact"}
-                  >
-                    <ShoppingCart className="h-4 w-4" />
-                    Add to Cart
-                  </Button>
-                </div>
-              </motion.div>
+            {filtered.map((product, i) => (
+              <ProductCard key={product.id} product={product} index={i} />
             ))}
           </div>
+          {filtered.length === 0 && (
+            <p className="text-center text-muted-foreground py-16">No products match your filters.</p>
+          )}
         </div>
       </main>
-
       <Footer />
     </div>
   );
