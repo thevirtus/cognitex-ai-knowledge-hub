@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Mail, Instagram, Twitter, Facebook, Youtube } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/frosthaven-logo.png";
 
 export const Footer = () => {
@@ -24,12 +25,8 @@ export const Footer = () => {
               Free shipping on all orders.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="hero" size="lg">
-                Shop Now
-              </Button>
-              <Button variant="heroOutline" size="lg">
-                Contact Us
-              </Button>
+              <Link to="/products"><Button variant="hero" size="lg">Shop Now</Button></Link>
+              <Link to="/support"><Button variant="heroOutline" size="lg">Contact Us</Button></Link>
             </div>
           </motion.div>
         </div>
@@ -42,16 +39,11 @@ export const Footer = () => {
           <div>
             <img src={logo} alt="Frosthaven" className="h-10 w-auto mb-6 brightness-0 invert" />
             <p className="text-primary-foreground/60 text-sm mb-6">
-              Premium cold plunge tubs curated for recovery, wellness, and
-              rejuvenation.
+              Premium cold plunge tubs curated for recovery, wellness, and rejuvenation.
             </p>
             <div className="flex gap-4">
               {[Instagram, Twitter, Facebook, Youtube].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
+                <a key={index} href="#" className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors">
                   <Icon className="h-5 w-5" />
                 </a>
               ))}
@@ -62,18 +54,16 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold mb-6">Quick Links</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/60">
-              {["Products", "About Us", "Testimonials", "FAQ", "Blog"].map(
-                (link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="hover:text-primary-foreground transition-colors"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                )
-              )}
+              {[
+                { label: "Products", to: "/products" },
+                { label: "Commercial", to: "/commercial" },
+                { label: "Brands", to: "/brands" },
+                { label: "Cold Plunge Guide", to: "/guide" },
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} className="hover:text-primary-foreground transition-colors">{link.label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -82,19 +72,12 @@ export const Footer = () => {
             <h4 className="font-semibold mb-6">Support</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/60">
               {[
-                "Shipping & Returns",
-                "Warranty",
-                "Installation Guide",
-                "Maintenance Tips",
-                "Contact Support",
+                { label: "Shipping & Delivery", to: "/shipping" },
+                { label: "Warranty", to: "/warranty" },
+                { label: "Customer Support", to: "/support" },
               ].map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="hover:text-primary-foreground transition-colors"
-                  >
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link to={link.to} className="hover:text-primary-foreground transition-colors">{link.label}</Link>
                 </li>
               ))}
             </ul>
@@ -114,12 +97,8 @@ export const Footer = () => {
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/50">
           <p>&copy; 2025 Frosthaven Tubs. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-primary-foreground transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-primary-foreground transition-colors">
-              Terms of Service
-            </a>
+            <a href="#" className="hover:text-primary-foreground transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-primary-foreground transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>
