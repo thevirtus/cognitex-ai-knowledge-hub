@@ -23,25 +23,25 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <CartProvider>
-      <Toaster />
-      <Sonner />
-      <CartDrawer />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-          <Route path="/collection/:slug" element={<CollectionPage />} />
-          <Route path="/commercial" element={<CommercialPage />} />
-          <Route path="/brands" element={<BrandsPage />} />
-          <Route path="/shipping" element={<ShippingPage />} />
-          <Route path="/warranty" element={<WarrantyPage />} />
-          <Route path="/support" element={<SupportPage />} />
-          <Route path="/guide" element={<GuidePage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <CartDrawer />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/collection/:slug" element={<CollectionPage />} />
+            <Route path="/commercial" element={<CommercialPage />} />
+            <Route path="/brands" element={<BrandsPage />} />
+            <Route path="/shipping" element={<ShippingPage />} />
+            <Route path="/warranty" element={<WarrantyPage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/guide" element={<GuidePage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
       </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>
