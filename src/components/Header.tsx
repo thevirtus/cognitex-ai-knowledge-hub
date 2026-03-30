@@ -28,6 +28,7 @@ export const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const { totalItems, setIsOpen: openCart } = useCart();
   const isHomePage = location.pathname === "/";
 
   useEffect(() => {
