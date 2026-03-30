@@ -5,11 +5,13 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getProduct } from "@/data/catalog";
+import { useCart } from "@/context/CartContext";
 import { ShoppingCart, Truck, ShieldCheck, RotateCcw, Lock, ChevronLeft } from "lucide-react";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = getProduct(id || "");
+  const { addItem } = useCart();
 
   useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
@@ -95,7 +97,7 @@ const ProductDetail = () => {
                 </table>
               </div>
 
-              <Button variant="default" size="lg" className="w-full" disabled={!product.inStock}>
+              <Button variant="default" size="lg" className="w-full" disabled={!product.inStock} onClick={() => addItem(product)}>
                 <ShoppingCart className="h-5 w-5" />
                 Add to Cart
               </Button>

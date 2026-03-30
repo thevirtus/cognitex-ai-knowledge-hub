@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Thermometer, Droplets, Timer, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
 import type { Product } from "@/data/catalog";
 
 interface Props {
@@ -9,7 +10,9 @@ interface Props {
   index?: number;
 }
 
-export const ProductCard = ({ product, index = 0 }: Props) => (
+export const ProductCard = ({ product, index = 0 }: Props) => {
+  const { addItem } = useCart();
+  return (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -67,10 +70,11 @@ export const ProductCard = ({ product, index = 0 }: Props) => (
         </div>
       )}
 
-      <Button variant="default" className="w-full" disabled={!product.inStock}>
+      <Button variant="default" className="w-full" disabled={!product.inStock} onClick={() => addItem(product)}>
         <ShoppingCart className="h-4 w-4" />
         Add to Cart
       </Button>
     </div>
   </motion.div>
-);
+  );
+};

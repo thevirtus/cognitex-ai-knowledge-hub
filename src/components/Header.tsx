@@ -3,6 +3,7 @@ import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
 import logo from "@/assets/frosthaven-logo.png";
 
 const mainNav = [
@@ -27,6 +28,7 @@ export const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const { totalItems, setIsOpen: openCart } = useCart();
   const isHomePage = location.pathname === "/";
 
   useEffect(() => {
@@ -126,8 +128,13 @@ export const Header = () => {
             >
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className={useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}>
+            <Button variant="ghost" size="icon" className={`relative ${useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}`} onClick={() => openCart(true)}>
               <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
             </Button>
             <Button variant="default" onClick={() => navigate("/products")}>
               Shop Now
