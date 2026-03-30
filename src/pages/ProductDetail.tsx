@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getProduct } from "@/data/catalog";
+import { useCart } from "@/context/CartContext";
 import { ShoppingCart, Truck, ShieldCheck, RotateCcw, Lock, ChevronLeft } from "lucide-react";
 
 const ProductDetail = () => {
