@@ -70,10 +70,11 @@ export const ProductCard = ({ product, index = 0 }: Props) => {
         </div>
       )}
 
-      <Button variant="default" className="w-full" disabled={!product.inStock}>
+      <Button variant="default" className="w-full" disabled={!product.inStock} onClick={() => addItem(product)}>
         <ShoppingCart className="h-4 w-4" />
         Add to Cart
       </Button>
     </div>
   </motion.div>
-);
+  );
+};
