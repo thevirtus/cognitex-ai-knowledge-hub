@@ -11,6 +11,7 @@ import { ShoppingCart, Truck, ShieldCheck, RotateCcw, Lock, ChevronLeft } from "
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const product = getProduct(id || "");
+  const { addItem } = useCart();
 
   useEffect(() => { window.scrollTo(0, 0); }, [id]);
 
