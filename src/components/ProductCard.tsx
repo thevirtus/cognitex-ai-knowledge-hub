@@ -10,7 +10,9 @@ interface Props {
   index?: number;
 }
 
-export const ProductCard = ({ product, index = 0 }: Props) => (
+export const ProductCard = ({ product, index = 0 }: Props) => {
+  const { addItem } = useCart();
+  return (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
