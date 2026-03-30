@@ -97,7 +97,7 @@ const ProductDetail = () => {
                 </table>
               </div>
 
-              <Button variant="default" size="lg" className="w-full" disabled={!product.inStock}>
+              <Button variant="default" size="lg" className="w-full" disabled={!product.inStock} onClick={() => addItem(product)}>
                 <ShoppingCart className="h-5 w-5" />
                 Add to Cart
               </Button>
