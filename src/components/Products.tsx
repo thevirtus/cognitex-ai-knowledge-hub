@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ProductCard } from "@/components/ProductCard";
-import { products } from "@/data/catalog";
-
-const featured = products.slice(0, 3);
+import { ShopifyProductCard } from "@/components/ShopifyProductCard";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
+import { Loader2 } from "lucide-react";
 
 export const Products = () => {
+  const { data: products, isLoading } = useShopifyProducts();
+  const featured = products?.slice(0, 3) || [];
+
   return (
     <section id="products" className="frost-section bg-background">
       <div className="container mx-auto">
@@ -29,11 +31,19 @@ export const Products = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featured.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : featured.length === 0 ? (
+          <p className="text-center text-muted-foreground py-16">No products found</p>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featured.map((product, index) => (
+              <ShopifyProductCard key={product.node.id} product={product} index={index} />
+            ))}
+          </div>
+        )}
 
         <motion.div
           initial={{ opacity: 0 }}

@@ -3,7 +3,7 @@ import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useCart } from "@/context/CartContext";
+import { useCartStore } from "@/stores/cartStore";
 import logo from "@/assets/frosthaven-logo.png";
 
 const mainNav = [
@@ -28,7 +28,8 @@ export const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const { totalItems, setIsOpen: openCart } = useCart();
+  const totalItems = useCartStore(state => state.items.reduce((s, i) => s + i.quantity, 0));
+  const setIsOpen = useCartStore(state => state.setIsOpen);
   const isHomePage = location.pathname === "/";
 
   useEffect(() => {
@@ -36,6 +37,9 @@ export const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => { setIsMobileMenuOpen(false); }, [location.pathname]);
 
   const useDarkText = !isHomePage || isScrolled;
 
@@ -56,6 +60,7 @@ export const Header = () => {
       navigate(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery("");
+      setIsMobileMenuOpen(false);
     }
   };
 
@@ -77,7 +82,7 @@ export const Header = () => {
           useDarkText ? "frost-glass shadow-soft py-3" : "bg-transparent py-4"
         }`}
       >
-        <div className="container mx-auto flex items-center justify-between">
+        <div className="container mx-auto flex items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-3 shrink-0">
             <img src={logo} alt="Frosthaven" className="h-10 w-auto" />
           </Link>
@@ -97,8 +102,8 @@ export const Header = () => {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
-            {/* Search */}
+          {/* Desktop right side */}
+          <div className="hidden lg:flex items-center gap-3">
             <AnimatePresence>
               {searchOpen && (
                 <motion.form
@@ -128,7 +133,7 @@ export const Header = () => {
             >
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className={`relative ${useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}`} onClick={() => openCart(true)}>
+            <Button variant="ghost" size="icon" className={`relative ${useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}`} onClick={() => setIsOpen(true)}>
               <ShoppingCart className="h-5 w-5" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -141,18 +146,28 @@ export const Header = () => {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className={`h-6 w-6 ${useDarkText ? "text-foreground" : "text-white"}`} />
-            ) : (
-              <Menu className={`h-6 w-6 ${useDarkText ? "text-foreground" : "text-white"}`} />
-            )}
-          </button>
+          {/* Mobile: cart + menu button */}
+          <div className="flex lg:hidden items-center gap-2">
+            <Button variant="ghost" size="icon" className={`relative ${useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}`} onClick={() => setIsOpen(true)}>
+              <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Button>
+            <button
+              className="p-2"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className={`h-6 w-6 ${useDarkText ? "text-foreground" : "text-white"}`} />
+              ) : (
+                <Menu className={`h-6 w-6 ${useDarkText ? "text-foreground" : "text-white"}`} />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
@@ -164,11 +179,11 @@ export const Header = () => {
               exit={{ opacity: 0, height: 0 }}
               className="lg:hidden frost-glass border-t border-border"
             >
-              <nav className="container mx-auto py-6 flex flex-col gap-3">
+              <nav className="container mx-auto py-6 px-4 flex flex-col gap-3">
                 {mainNav.map((link) => (
                   <button
                     key={link.name}
-                    onClick={() => { setIsMobileMenuOpen(false); handleNavClick(link); }}
+                    onClick={() => handleNavClick(link)}
                     className="text-foreground font-medium py-2 hover:text-primary transition-colors text-left"
                   >
                     {link.name}
@@ -176,7 +191,7 @@ export const Header = () => {
                 ))}
                 <div className="border-t border-border pt-3 mt-2 flex flex-col gap-2">
                   {secondaryNav.map((link) => (
-                    <Link key={link.name} to={link.href} onClick={() => setIsMobileMenuOpen(false)} className="text-sm text-muted-foreground py-1.5 hover:text-primary transition-colors">
+                    <Link key={link.name} to={link.href} className="text-sm text-muted-foreground py-1.5 hover:text-primary transition-colors">
                       {link.name}
                     </Link>
                   ))}
@@ -190,7 +205,7 @@ export const Header = () => {
                       className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
                     />
                   </form>
-                  <Button variant="default" className="w-full" onClick={() => { setIsMobileMenuOpen(false); navigate("/products"); }}>
+                  <Button variant="default" className="w-full" onClick={() => navigate("/products")}>
                     Shop Now
                   </Button>
                 </div>
