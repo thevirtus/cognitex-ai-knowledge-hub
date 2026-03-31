@@ -151,38 +151,50 @@ export const Header = () => {
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="lg:hidden bg-background border-t border-border absolute inset-x-0 top-full max-h-[calc(100vh-7rem)] overflow-y-auto z-50"
-            >
-              <nav className="container mx-auto py-6 px-4 flex flex-col gap-3">
-                {mainNav.map((link) => (
-                  <button
-                    key={link.name}
-                    onClick={() => handleNavClick(link)}
-                    className="text-foreground font-medium py-2 hover:text-primary transition-colors text-left"
-                  >
-                    {link.name}
-                  </button>
-                ))}
-                <div className="border-t border-border pt-3 mt-2 flex flex-col gap-2">
-                  {secondaryNav.map((link) => (
-                    <Link key={link.name} to={link.href} className="text-sm text-muted-foreground py-1.5 hover:text-primary transition-colors">
+            <>
+              <motion.button
+                type="button"
+                aria-label="Close mobile menu backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 top-7 z-[49] bg-foreground/70 backdrop-blur-sm lg:hidden"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+                className="lg:hidden bg-background border-t border-border absolute inset-x-0 top-full z-50 h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain"
+              >
+                <nav className="container mx-auto min-h-full py-6 px-4 flex flex-col gap-3">
+                  {mainNav.map((link) => (
+                    <button
+                      key={link.name}
+                      onClick={() => handleNavClick(link)}
+                      className="text-foreground font-medium py-2 hover:text-primary transition-colors text-left"
+                    >
                       {link.name}
-                    </Link>
+                    </button>
                   ))}
-                </div>
-                <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                  <LiveSearch useDarkText={true} mobile onClose={() => setIsMobileMenuOpen(false)} />
-                  <Button variant="default" className="w-full" onClick={() => navigate("/products")}>
-                    Shop Now
-                  </Button>
-                </div>
-              </nav>
-            </motion.div>
+                  <div className="border-t border-border pt-3 mt-2 flex flex-col gap-2">
+                    {secondaryNav.map((link) => (
+                      <Link key={link.name} to={link.href} className="text-sm text-muted-foreground py-1.5 hover:text-primary transition-colors">
+                        {link.name}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="flex flex-col gap-3 pt-4 border-t border-border">
+                    <LiveSearch useDarkText={true} mobile onClose={() => setIsMobileMenuOpen(false)} />
+                    <Button variant="default" className="w-full" onClick={() => navigate("/products")}>
+                      Shop Now
+                    </Button>
+                  </div>
+                </nav>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </header>
