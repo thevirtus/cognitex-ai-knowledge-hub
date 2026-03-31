@@ -53,15 +53,6 @@ export const Header = () => {
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchOpen(false);
-      setSearchQuery("");
-      setIsMobileMenuOpen(false);
-    }
-  };
 
   return (
     <>
