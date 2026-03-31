@@ -96,9 +96,11 @@ export const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/50">
           <p>&copy; 2025 Frosthaven Tubs. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-primary-foreground transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-primary-foreground transition-colors">Terms of Service</a>
+          <div className="flex flex-wrap gap-6">
+            <Link to="/privacy" className="hover:text-primary-foreground transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-primary-foreground transition-colors">Terms of Service</Link>
+            <Link to="/shipping" className="hover:text-primary-foreground transition-colors">Shipping Policy</Link>
+            <Link to="/refund" className="hover:text-primary-foreground transition-colors">Return &amp; Refund Policy</Link>
           </div>
         </div>
       </div>

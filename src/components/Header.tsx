@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Menu, X, ShoppingCart, Search } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
+import { LiveSearch } from "@/components/LiveSearch";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
