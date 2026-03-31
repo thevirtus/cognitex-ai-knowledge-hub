@@ -67,7 +67,7 @@ export const Header = () => {
   return (
     <>
       {/* Secondary nav bar */}
-      <div className={`fixed top-0 left-0 right-0 z-[51] transition-all duration-300 ${useDarkText ? "bg-foreground text-primary-foreground" : "bg-foreground/40 backdrop-blur-sm text-primary-foreground/80"}`}>
+      <div className={`fixed top-0 left-0 right-0 z-[51] transition-all duration-300 ${useDarkText || isMobileMenuOpen ? "bg-foreground text-primary-foreground" : "bg-foreground/40 backdrop-blur-sm text-primary-foreground/80"}`}>
         <div className="container mx-auto flex items-center justify-end gap-6 py-1.5 px-4">
           {secondaryNav.map((link) => (
             <Link key={link.name} to={link.href} className="text-[11px] hover:text-primary transition-colors hidden md:block">
