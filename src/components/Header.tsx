@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Menu, X, ShoppingCart, Search } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
+import { LiveSearch } from "@/components/LiveSearch";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -24,8 +25,6 @@ const secondaryNav = [
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const totalItems = useCartStore(state => state.items.reduce((s, i) => s + i.quantity, 0));
@@ -54,15 +53,6 @@ export const Header = () => {
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchOpen(false);
-      setSearchQuery("");
-      setIsMobileMenuOpen(false);
-    }
-  };
 
   return (
     <>
@@ -104,35 +94,7 @@ export const Header = () => {
 
           {/* Desktop right side */}
           <div className="hidden lg:flex items-center gap-3">
-            <AnimatePresence>
-              {searchOpen && (
-                <motion.form
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 220, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  onSubmit={handleSearch}
-                  className="overflow-hidden"
-                >
-                  <input
-                    autoFocus
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="What are you looking for?"
-                    className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring"
-                    onBlur={() => { if (!searchQuery) setSearchOpen(false); }}
-                  />
-                </motion.form>
-              )}
-            </AnimatePresence>
-            <Button
-              variant="ghost"
-              size="icon"
-              className={useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}
-              onClick={() => setSearchOpen(!searchOpen)}
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+            <LiveSearch useDarkText={useDarkText} />
             <Button variant="ghost" size="icon" className={`relative ${useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}`} onClick={() => setIsOpen(true)}>
               <ShoppingCart className="h-5 w-5" />
               {totalItems > 0 && (
@@ -198,14 +160,7 @@ export const Header = () => {
                   ))}
                 </div>
                 <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                  <form onSubmit={handleSearch}>
-                    <input
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="What are you looking for?"
-                      className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </form>
+                  <LiveSearch useDarkText={true} mobile onClose={() => setIsMobileMenuOpen(false)} />
                   <Button variant="default" className="w-full" onClick={() => navigate("/products")}>
                     Shop Now
                   </Button>

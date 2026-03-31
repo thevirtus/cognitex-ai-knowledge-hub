@@ -15,6 +15,9 @@ import ShippingPage from "./pages/ShippingPage";
 import WarrantyPage from "./pages/WarrantyPage";
 import SupportPage from "./pages/SupportPage";
 import GuidePage from "./pages/GuidePage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import RefundPage from "./pages/RefundPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +38,9 @@ const AppContent = () => {
         <Route path="/warranty" element={<WarrantyPage />} />
         <Route path="/support" element={<SupportPage />} />
         <Route path="/guide" element={<GuidePage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/refund" element={<RefundPage />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
