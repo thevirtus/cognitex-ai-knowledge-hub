@@ -152,16 +152,6 @@ export const Header = () => {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>
-              <motion.button
-                type="button"
-                aria-label="Close mobile menu backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 top-7 z-[49] bg-foreground/70 backdrop-blur-sm lg:hidden"
-                onClick={() => setIsMobileMenuOpen(false)}
-              />
               <motion.div
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
