@@ -7,12 +7,13 @@ import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 interface LiveSearchProps {
   useDarkText: boolean;
   onClose?: () => void;
+  mobile?: boolean;
 }
 
-export const LiveSearch = ({ useDarkText, onClose }: LiveSearchProps) => {
+export const LiveSearch = ({ useDarkText, onClose, mobile }: LiveSearchProps) => {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!!mobile);
   const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -30,6 +31,7 @@ export const LiveSearch = ({ useDarkText, onClose }: LiveSearchProps) => {
   }, [debouncedQuery]);
 
   useEffect(() => {
+    if (mobile) return;
     const handleClickOutside = (e: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
         setOpen(false);
@@ -39,7 +41,7 @@ export const LiveSearch = ({ useDarkText, onClose }: LiveSearchProps) => {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
+  }, [onClose, mobile]);
 
   const handleSelect = (handle: string) => {
     navigate(`/product/${handle}`);
@@ -58,8 +60,58 @@ export const LiveSearch = ({ useDarkText, onClose }: LiveSearchProps) => {
     }
   };
 
+  if (mobile) {
+    return (
+      <div ref={wrapperRef} className="relative">
+        <form onSubmit={handleSubmit}>
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search products..."
+            className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </form>
+        <AnimatePresence>
+          {showResults && (
+            <motion.div
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              className="mt-2 w-full bg-popover border border-border rounded-lg shadow-lg overflow-hidden z-[100]"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                </div>
+              ) : !products?.length ? (
+                <p className="text-sm text-muted-foreground text-center py-4">No results found</p>
+              ) : (
+                <ul className="max-h-48 overflow-y-auto">
+                  {products.slice(0, 5).map((p) => (
+                    <li key={p.node.id}>
+                      <button
+                        type="button"
+                        onClick={() => handleSelect(p.node.handle)}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-accent transition-colors"
+                      >
+                        {p.node.images.edges[0]?.node.url && (
+                          <img src={p.node.images.edges[0].node.url} alt={p.node.title} className="w-8 h-8 rounded object-cover bg-muted" />
+                        )}
+                        <span className="text-sm text-foreground truncate">{p.node.title}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
   return (
-    <div ref={wrapperRef} className="relative">
+    <div ref={wrapperRef} className="relative flex items-center">
       <AnimatePresence>
         {open && (
           <motion.form
@@ -91,7 +143,6 @@ export const LiveSearch = ({ useDarkText, onClose }: LiveSearchProps) => {
         <Search className="h-5 w-5" />
       </button>
 
-      {/* Suggestions dropdown */}
       <AnimatePresence>
         {open && showResults && (
           <motion.div
@@ -116,11 +167,7 @@ export const LiveSearch = ({ useDarkText, onClose }: LiveSearchProps) => {
                       className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-accent transition-colors"
                     >
                       {p.node.images.edges[0]?.node.url && (
-                        <img
-                          src={p.node.images.edges[0].node.url}
-                          alt={p.node.title}
-                          className="w-10 h-10 rounded object-cover bg-muted"
-                        />
+                        <img src={p.node.images.edges[0].node.url} alt={p.node.title} className="w-10 h-10 rounded object-cover bg-muted" />
                       )}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-foreground truncate">{p.node.title}</p>

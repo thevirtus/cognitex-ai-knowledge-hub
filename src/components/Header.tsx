@@ -160,14 +160,7 @@ export const Header = () => {
                   ))}
                 </div>
                 <div className="flex flex-col gap-3 pt-4 border-t border-border">
-                  <form onSubmit={handleSearch}>
-                    <input
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="What are you looking for?"
-                      className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </form>
+                  <LiveSearch useDarkText={true} mobile onClose={() => setIsMobileMenuOpen(false)} />
                   <Button variant="default" className="w-full" onClick={() => navigate("/products")}>
                     Shop Now
                   </Button>
