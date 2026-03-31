@@ -59,6 +59,7 @@ export const Header = () => {
   const useDarkText = !isHomePage || isScrolled;
 
   const handleNavClick = (link: { href: string; isRoute: boolean }) => {
+    setIsMobileMenuOpen(false);
     if (link.isRoute) {
       navigate(link.href);
     } else if (!isHomePage) {
