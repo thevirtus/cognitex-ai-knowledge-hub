@@ -15,6 +15,9 @@ import ShippingPage from "./pages/ShippingPage";
 import WarrantyPage from "./pages/WarrantyPage";
 import SupportPage from "./pages/SupportPage";
 import GuidePage from "./pages/GuidePage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import RefundPage from "./pages/RefundPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
