@@ -37,6 +37,22 @@ export const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   // Close mobile menu on route change
   useEffect(() => { setIsMobileMenuOpen(false); }, [location.pathname]);
 
