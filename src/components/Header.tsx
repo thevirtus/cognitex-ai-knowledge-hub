@@ -174,10 +174,11 @@ export const Header = () => {
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-background border-t border-border fixed inset-x-0 top-[calc(theme(spacing.7)+theme(spacing.14))] bottom-0 overflow-y-auto"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden bg-background border-t border-border absolute inset-x-0 top-full max-h-[calc(100vh-7rem)] overflow-y-auto z-50"
             >
               <nav className="container mx-auto py-6 px-4 flex flex-col gap-3">
                 {mainNav.map((link) => (
