@@ -79,7 +79,7 @@ export const Header = () => {
 
       <header
         className={`fixed top-7 left-0 right-0 z-50 transition-all duration-300 ${
-          useDarkText ? "frost-glass shadow-soft py-3" : "bg-transparent py-4"
+          useDarkText || isMobileMenuOpen ? "frost-glass shadow-soft py-3" : "bg-transparent py-4"
         }`}
       >
         <div className="container mx-auto flex items-center justify-between px-4">
