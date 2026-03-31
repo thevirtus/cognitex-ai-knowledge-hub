@@ -105,35 +105,7 @@ export const Header = () => {
 
           {/* Desktop right side */}
           <div className="hidden lg:flex items-center gap-3">
-            <AnimatePresence>
-              {searchOpen && (
-                <motion.form
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 220, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  onSubmit={handleSearch}
-                  className="overflow-hidden"
-                >
-                  <input
-                    autoFocus
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="What are you looking for?"
-                    className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-ring"
-                    onBlur={() => { if (!searchQuery) setSearchOpen(false); }}
-                  />
-                </motion.form>
-              )}
-            </AnimatePresence>
-            <Button
-              variant="ghost"
-              size="icon"
-              className={useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}
-              onClick={() => setSearchOpen(!searchOpen)}
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+            <LiveSearch useDarkText={useDarkText} />
             <Button variant="ghost" size="icon" className={`relative ${useDarkText ? "" : "text-white hover:text-white/80 hover:bg-white/10"}`} onClick={() => setIsOpen(true)}>
               <ShoppingCart className="h-5 w-5" />
               {totalItems > 0 && (
