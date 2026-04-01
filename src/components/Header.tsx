@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { LiveSearch } from "@/components/LiveSearch";
+import { MegaMenu } from "@/components/MegaMenu";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -8,11 +9,11 @@ import { useCartStore } from "@/stores/cartStore";
 import logo from "@/assets/frosthaven-logo.png";
 
 const mainNav = [
-  { name: "Products", href: "/products", isRoute: true },
-  { name: "Commercial", href: "/commercial", isRoute: true },
-  { name: "Brands", href: "/brands", isRoute: true },
-  { name: "About", href: "#about", isRoute: false },
-  { name: "Contact", href: "#contact", isRoute: false },
+  { name: "Products", href: "/products", isRoute: true, isMega: false },
+  { name: "Commercial", href: "/commercial", isRoute: true, isMega: false },
+  { name: "Brands", href: "/brands", isRoute: true, isMega: false },
+  { name: "About", href: "#about", isRoute: false, isMega: false },
+  { name: "Contact", href: "#contact", isRoute: false, isMega: false },
 ];
 
 const secondaryNav = [
