@@ -13,27 +13,27 @@ const megaMenuData: MegaMenuCategory[] = [
     title: "Cold Plunge Tubs",
     links: [
       { name: "All Cold Plunges", href: "/products" },
-      { name: "Residential Units", href: "/products?q=residential" },
-      { name: "Portable Systems", href: "/products?q=portable" },
-      { name: "Indoor Models", href: "/products?q=indoor" },
+      { name: "Residential Units", href: "/cold-plunge-tubs/residential-units" },
+      { name: "Portable Systems", href: "/cold-plunge-tubs/portable-systems" },
+      { name: "Indoor Models", href: "/cold-plunge-tubs/indoor-models" },
     ],
   },
   {
     title: "Commercial",
     links: [
       { name: "Commercial Systems", href: "/commercial" },
-      { name: "Gym & Fitness", href: "/products?q=gym" },
-      { name: "Spa & Wellness", href: "/products?q=spa" },
-      { name: "Sports Recovery", href: "/products?q=recovery" },
+      { name: "Gym & Fitness", href: "/commercial/gym-fitness" },
+      { name: "Spa & Wellness", href: "/commercial/spa-wellness" },
+      { name: "Sports Recovery", href: "/commercial/sports-recovery" },
     ],
   },
   {
     title: "Accessories",
     links: [
-      { name: "Chillers", href: "/products?q=chiller" },
-      { name: "Covers & Lids", href: "/products?q=cover" },
-      { name: "Filters & Parts", href: "/products?q=filter" },
-      { name: "Water Treatment", href: "/products?q=treatment" },
+      { name: "Chillers", href: "/accessories/chillers" },
+      { name: "Covers & Lids", href: "/accessories/covers-lids" },
+      { name: "Filters & Parts", href: "/accessories/filters-parts" },
+      { name: "Water Treatment", href: "/accessories/water-treatment" },
     ],
   },
   {
@@ -46,6 +46,9 @@ const megaMenuData: MegaMenuCategory[] = [
     ],
   },
 ];
+
+export { megaMenuData };
+export type { MegaMenuCategory };
 
 interface MegaMenuProps {
   useDarkText: boolean;
