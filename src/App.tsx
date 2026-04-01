@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import ProductsPage from "./pages/ProductsPage";
 import ProductDetail from "./pages/ProductDetail";
 import CollectionPage from "./pages/CollectionPage";
+import CategoryPage from "./pages/CategoryPage";
 import CommercialPage from "./pages/CommercialPage";
 import BrandsPage from "./pages/BrandsPage";
 import ShippingPage from "./pages/ShippingPage";
@@ -34,6 +35,7 @@ const AppContent = () => {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/collection/:slug" element={<CollectionPage />} />
+        <Route path="/:parent/:slug" element={<CategoryPage />} />
         <Route path="/commercial" element={<CommercialPage />} />
         <Route path="/brands" element={<BrandsPage />} />
         <Route path="/shipping" element={<ShippingPage />} />
