@@ -28,6 +28,7 @@ const AppContent = () => {
   return (
     <>
       <CartDrawer />
+      <LiveChatWidget />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/products" element={<ProductsPage />} />

@@ -6,6 +6,9 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useShopifyProduct } from "@/hooks/useShopifyProducts";
 import { useCartStore } from "@/stores/cartStore";
+import { ProductTabs } from "@/components/ProductTabs";
+import { ReviewSystem } from "@/components/ReviewSystem";
+import { EstimatedDelivery } from "@/components/EstimatedDelivery";
 import { ShoppingCart, Truck, ShieldCheck, RotateCcw, Lock, ChevronLeft, Loader2 } from "lucide-react";
 
 const ProductDetail = () => {
@@ -110,9 +113,14 @@ const ProductDetail = () => {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
               <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">{product.title}</h1>
               <p className="text-3xl font-bold text-primary mb-2">${price.toLocaleString()}</p>
-              <p className={`text-sm mb-6 ${available ? "text-green-600" : "text-destructive"}`}>
+              <p className={`text-sm mb-4 ${available ? "text-green-600" : "text-destructive"}`}>
                 {available ? "● In Stock" : "● Out of Stock"}
               </p>
+
+              {/* Estimated Delivery */}
+              <div className="mb-5">
+                <EstimatedDelivery />
+              </div>
 
               {/* Trust indicators */}
               <div className="grid grid-cols-2 gap-3 mb-6">
@@ -124,9 +132,7 @@ const ProductDetail = () => {
                 ))}
               </div>
 
-              <p className="text-muted-foreground mb-8">{product.description}</p>
-
-              <Button variant="default" size="lg" className="w-full" disabled={!available || isLoading} onClick={handleAddToCart}>
+              <Button variant="default" size="lg" className="w-full mb-4" disabled={!available || isLoading} onClick={handleAddToCart}>
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
@@ -138,6 +144,12 @@ const ProductDetail = () => {
               </Button>
             </motion.div>
           </div>
+
+          {/* Tabs */}
+          <ProductTabs description={product.description} handle={product.handle} />
+
+          {/* Reviews */}
+          <ReviewSystem productId={product.id} productTitle={product.title} />
         </div>
       </main>
       <Footer />

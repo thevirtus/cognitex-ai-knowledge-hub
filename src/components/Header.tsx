@@ -97,6 +97,7 @@ export const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
+            <MegaMenu useDarkText={useDarkText} />
             {mainNav.map((link) => (
               <button
                 key={link.name}
