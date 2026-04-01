@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartDrawer } from "@/components/CartDrawer";
+import { CartProvider } from "@/context/CartContext";
 import { LiveChatWidget } from "@/components/LiveChatWidget";
 import { useCartSync } from "@/hooks/useCartSync";
 import Index from "./pages/Index";
@@ -11,6 +12,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ProductDetail from "./pages/ProductDetail";
 import CollectionPage from "./pages/CollectionPage";
 import CategoryPage from "./pages/CategoryPage";
+import AllProductsPage from "./pages/AllProductsPage";
 import CommercialPage from "./pages/CommercialPage";
 import BrandsPage from "./pages/BrandsPage";
 import ShippingPage from "./pages/ShippingPage";
@@ -32,10 +34,10 @@ const AppContent = () => {
       <LiveChatWidget />
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/products" element={<AllProductsPage />} />
+        <Route path="/products/shopify" element={<ProductsPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/collection/:slug" element={<CollectionPage />} />
-        <Route path="/:parent/:slug" element={<CategoryPage />} />
         <Route path="/commercial" element={<CommercialPage />} />
         <Route path="/brands" element={<BrandsPage />} />
         <Route path="/shipping" element={<ShippingPage />} />
@@ -45,6 +47,7 @@ const AppContent = () => {
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/refund" element={<RefundPage />} />
+        <Route path="/:parent/:slug" element={<CategoryPage />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -55,11 +58,13 @@ const AppContent = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <CartProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
