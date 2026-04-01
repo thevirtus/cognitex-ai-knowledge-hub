@@ -17,7 +17,7 @@ export const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative container mx-auto px-4 pt-20 md:pt-24">
+      <div className="relative container mx-auto px-4 pt-24 md:pt-24">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -40,7 +40,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight mb-6"
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight mb-6"
           >
             Embrace the
             <span className="block">
@@ -96,7 +96,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-12 mb-4 grid grid-cols-2 md:grid-cols-4 gap-8"
+          className="mt-12 mb-4 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
         >
           {[
             { value: "39°F", label: "Min Temperature" },
