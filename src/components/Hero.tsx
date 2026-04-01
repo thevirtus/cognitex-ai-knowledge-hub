@@ -96,7 +96,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-12 mb-4 grid grid-cols-2 md:grid-cols-4 gap-8"
+          className="mt-12 mb-4 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
         >
           {[
             { value: "39°F", label: "Min Temperature" },
