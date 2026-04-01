@@ -68,7 +68,7 @@ export const LiveSearch = ({ useDarkText, onClose, mobile }: LiveSearchProps) =>
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search products..."
-            className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/50"
+            className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-2 focus:outline-none focus:border-border"
           />
         </form>
         <AnimatePresence>
@@ -127,7 +127,7 @@ export const LiveSearch = ({ useDarkText, onClose, mobile }: LiveSearchProps) =>
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/50"
+              className="w-full text-sm rounded-lg border border-border bg-background text-foreground px-3 py-1.5 focus:outline-none focus:border-border"
             />
           </motion.form>
         )}
