@@ -2,9 +2,13 @@ import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ProductCard } from "@/components/ProductCard";
 import { ShopifyProductCard } from "@/components/ShopifyProductCard";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
+import { categories } from "@/data/categories";
+import { products as catalogProducts } from "@/data/catalog";
 import { Search, SlidersHorizontal, Loader2 } from "lucide-react";
+import type { Product } from "@/data/catalog";
 
 const priceRanges = [
   { label: "All Prices", min: 0, max: Infinity },
@@ -15,38 +19,77 @@ const priceRanges = [
   { label: "$10,000+", min: 10000, max: Infinity },
 ];
 
+const categoryFilters = [
+  { label: "All Categories", value: "all" },
+  { label: "Cold Plunge Tubs", value: "cold-plunge-tubs" },
+  { label: "Commercial", value: "commercial-systems" },
+  { label: "Accessories", value: "accessories" },
+  { label: "Outdoor", value: "outdoor-units" },
+  { label: "Recovery", value: "recovery-equipment" },
+];
+
 const AllProductsPage = () => {
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedPrice, setSelectedPrice] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const { data: shopifyProducts, isLoading: shopifyLoading } = useShopifyProducts();
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
-    return () => clearTimeout(timer);
-  }, [search]);
+  // Gather all unique local products
+  const allLocalProducts = useMemo(() => {
+    const map = new Map<string, Product>();
+    catalogProducts.forEach((p) => map.set(p.id, p));
+    categories.forEach((cat) => cat.products.forEach((p) => map.set(p.id, p)));
+    return Array.from(map.values());
+  }, []);
 
-  const searchQuery = debouncedSearch ? `title:*${debouncedSearch}*` : undefined;
-  const { data: products, isLoading } = useShopifyProducts(searchQuery);
+  const filteredLocal = useMemo(() => {
+    let result = allLocalProducts;
 
-  const filtered = useMemo(() => {
-    if (!products) return [];
-    let result = products;
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (p) => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.vendor.toLowerCase().includes(q)
+      );
+    }
 
-    // Price range filter
     const range = priceRanges[selectedPrice];
-    if (range && range.max !== Infinity || range.min !== 0) {
+    if (range) {
+      result = result.filter((p) => p.priceNum >= range.min && p.priceNum <= range.max);
+    }
+
+    if (selectedCategory !== "all") {
+      result = result.filter((p) => p.collection === selectedCategory);
+    }
+
+    return result.sort((a, b) => a.priceNum - b.priceNum);
+  }, [allLocalProducts, search, selectedPrice, selectedCategory]);
+
+  // Filter Shopify products too
+  const filteredShopify = useMemo(() => {
+    if (!shopifyProducts) return [];
+    let result = shopifyProducts;
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (p) => p.node.title.toLowerCase().includes(q) || p.node.description.toLowerCase().includes(q)
+      );
+    }
+
+    const range = priceRanges[selectedPrice];
+    if (range) {
       result = result.filter((p) => {
         const price = parseFloat(p.node.priceRange.minVariantPrice.amount);
         return price >= range.min && price <= range.max;
       });
     }
 
-    return result.sort((a, b) =>
-      parseFloat(a.node.priceRange.minVariantPrice.amount) - parseFloat(b.node.priceRange.minVariantPrice.amount)
-    );
-  }, [products, selectedPrice]);
+    return result;
+  }, [shopifyProducts, search, selectedPrice]);
+
+  const totalCount = filteredLocal.length + filteredShopify.length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -82,23 +125,36 @@ const AllProductsPage = () => {
                 ))}
               </select>
             </div>
+
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full sm:w-48 px-4 py-2.5 text-sm rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/50 appearance-none cursor-pointer"
+            >
+              {categoryFilters.map((c) => (
+                <option key={c.value} value={c.value}>{c.label}</option>
+              ))}
+            </select>
           </div>
 
-          {isLoading ? (
-            <div className="flex justify-center py-16">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          ) : filtered.length === 0 ? (
+          {/* Results count */}
+          <p className="text-sm text-muted-foreground mb-6">
+            {shopifyLoading ? "Loading..." : `${totalCount} product${totalCount !== 1 ? "s" : ""} found`}
+          </p>
+
+          {totalCount === 0 && !shopifyLoading ? (
             <p className="text-center text-muted-foreground py-16">No products match your filters.</p>
           ) : (
-            <>
-              <p className="text-sm text-muted-foreground mb-6">{filtered.length} product{filtered.length !== 1 ? "s" : ""} found</p>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filtered.map((p, i) => (
-                  <ShopifyProductCard key={p.node.id} product={p} index={i} />
-                ))}
-              </div>
-            </>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Shopify products first (they have real images) */}
+              {filteredShopify.map((p, i) => (
+                <ShopifyProductCard key={p.node.id} product={p} index={i} />
+              ))}
+              {/* Local catalog products */}
+              {filteredLocal.map((p, i) => (
+                <ProductCard key={p.id} product={p} index={filteredShopify.length + i} />
+              ))}
+            </div>
           )}
         </div>
       </main>
